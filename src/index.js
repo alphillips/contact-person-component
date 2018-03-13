@@ -8,7 +8,6 @@ import EmailInput from '@react-ag-components/email-input'
 import Input from "@react-ag-components/input";
 import Address from "@react-ag-components/address";
 
-
 import "./contactperson.css";
 
 class ContactPerson extends React.Component {
@@ -110,6 +109,7 @@ class ContactPerson extends React.Component {
         </MuiThemeProvider>
 
         {this.state.contactPersonCode === "OTHER" && (
+          <MuiThemeProvider>
           <div>
             <div className="half-area">
               <Input
@@ -150,6 +150,7 @@ class ContactPerson extends React.Component {
               onChange={this.onChange("contactPersonAddress")}
             />
           </div>
+        </MuiThemeProvider>
         )}
       </div>
     );

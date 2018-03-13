@@ -26,7 +26,9 @@
     "@react-ag-components/checkbox": "latest",
     "@react-ag-components/email-input": "latest",
     "@react-ag-components/input": "latest",
-    "@react-ag-components/radiobutton": "latest"
+    "@react-ag-components/radiobutton": "latest",
+    "@react-ag-components/reference-data-selector": "latest",
+    "react-google-autocomplete": "^1.0.13"
   },
   "peerDependencies": {
     "react": "15.x"
