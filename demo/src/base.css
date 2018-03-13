@@ -1,0 +1,95 @@
+html {
+  position: relative;
+  min-height: 100%; }
+
+.uikit-body {
+  margin-bottom: 320px; }
+  @media screen and (min-width: 992px) {
+    .uikit-body {
+      margin-bottom: 80px; } }
+
+.main-block {
+  padding: 0 1em; }
+  @media screen and (min-width: 630px) {
+    .main-block {
+      padding: 0 2em; } }
+  @media screen and (min-width: 992px) {
+    .main-block {
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto; } }
+
+button.uikit-btn {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  min-width: 150px;
+  display: block; }
+
+.page-menu-grid {
+  lost-utility: clearfix; }
+  .page-menu-grid .application-menu {
+    display: none; }
+    @media screen and (min-width: 992px) {
+      .page-menu-grid .application-menu {
+        display: block;
+        lost-column: 3/12; } }
+  .page-menu-grid div.page {
+    lost-column: 1/1; }
+    @media screen and (min-width: 992px) {
+      .page-menu-grid div.page {
+        lost-column: 9/12; } }
+
+.page-header-grid {
+  lost-utility: clearfix; }
+  .page-header-grid .page-header {
+    lost-column: 1/1; }
+    @media screen and (min-width: 600px) {
+      .page-header-grid .page-header {
+        lost-column: 7/12; } }
+  .page-header-grid .page-header-rex-number {
+    display: none; }
+    @media screen and (min-width: 600px) {
+      .page-header-grid .page-header-rex-number {
+        display: block;
+        lost-column: 5/12; } }
+
+.clear-grid {
+  lost-utility: clearfix; }
+
+a.home-link {
+  margin-top: 1em;
+  display: none; }
+  @media screen and (min-width: 800px) {
+    a.home-link {
+      display: inline-block; } }
+
+h2.list-heading {
+  border-bottom: 2px solid #313131;
+  margin-bottom: 8px;
+  max-width: 700px;
+  width: 92%; }
+
+label.checkbox {
+  margin-bottom: 1em; }
+
+div.select {
+  margin-bottom: 1.5em; }
+
+.Select-placeholder, .Select--single > .Select-control .Select-value {
+  border: 2px solid #777777;
+  font-size: 16px; }
+  .Select-placeholder::focus, .Select--single > .Select-control .Select-value::focus {
+    outline: 1px solid #313131;
+    outline-offset: 1px;
+    background-color: #effafc; }
+
+.is-focused:not(.is-open) > .Select-control {
+  border-color: #777777; }
+
+.Select-menu-outer {
+  z-index: 999 !important; }
+
+.btn-group {
+  display: flex; }
+  .btn-group button {
+    margin-right: 1em; }
