@@ -17,6 +17,11 @@ const searchOptions = [
   { value: "clientEmail", label: "Client Email" },
   { value: "clientId", label: "Client ID" }
 ];
+const contactPersonOptions = [
+  { value: "ME", label: "Current User is Contact Person" },
+  { value: "OTHERCLIENT", label: "Set Another Client as Contact Person" },
+  { value: "OTHER", label: "Nominate Someone Else as Contact Person" }
+];
 
 class ContactPerson extends React.Component {
   constructor(props) {
@@ -25,7 +30,9 @@ class ContactPerson extends React.Component {
       contactPerson: props.contactPerson,
       contactPersonCode: "ME",
       searchTypeCode: "",
-      searchTypeIndex: 0
+      searchTypeIndex: 0,
+      searchEmailKeyword: "",
+      searchIdKeyword: ""
     };
   }
 
@@ -43,14 +50,12 @@ class ContactPerson extends React.Component {
     }
   }
 
-  setContactPersonCode = event => {
-    const contactPersonCode = event.target.value;
+  setContactPersonCode = (event, index) => {
     this.setState((prevState, props) => ({
-      contactPersonCode: contactPersonCode
-    }));
-    {this.props.markDirty !== undefined &&
-      this.props.markDirty("contactPersonCode", contactPersonCode)
-    }
+      contactPersonCode: contactPersonOptions[index].value,
+      contactPersonLabel: contactPersonOptions[index].label,
+      contactPersonIndex: index
+    }))
   };
 
   setSearchTypeCode = (event, index) => {
@@ -59,15 +64,9 @@ class ContactPerson extends React.Component {
       searchTypeLabel: searchOptions[index].label,
       searchTypeIndex: index,
       searchResults: null,
-      validationMessages: null,
-      selectFieldClassName: "medium-width"
+      searchEmailKeyword: "",
+      searchIdKeyword: ""
     }));
-
-    if(searchOptions[index].label === "Client Name") {
-      this.setState((prevState, props) => ({
-        selectFieldClassName: "small-width"
-      }));
-    }
   };
 
   onChange = field => {
@@ -118,77 +117,73 @@ class ContactPerson extends React.Component {
       <div className="contact-person-component">
         <h3>Contact Person</h3>
           <MuiThemeProvider>
-            <RadioButtonGroup
-              name="contactPersonMode"
-              defaultSelected={this.state.contactPersonCode}
-              onChange={this.setContactPersonCode}
-              valueSelected={this.state.contactPersonCode}
-            >
-            {!window.IS_STAFF &&
-              <RadioButton
-                value="ME"
-                label="Current User is Contact Person"
-                style={checkStyle}
-                labelStyle={checkLabelStyle}
-                name="radio-contactPersonMode"
-              />
-            }
-            <RadioButton
-              value="OTHERCLIENT"
-              label="Another Client is Contact Person"
-              style={checkStyle}
-              labelStyle={checkLabelStyle}
-              name="radio-contactPersonMode"
-            />
-              <RadioButton
-                value="OTHER"
-                label="Someone else is Contact Person"
-                style={checkStyle}
-                labelStyle={checkLabelStyle}
-                name="radio-contactPersonMode"
-              />
-            </RadioButtonGroup>
+            <SelectField
+             floatingLabelText="Contact Person Type..."
+             onChange={this.setContactPersonCode}
+             value={this.state.contactPersonCode}
+             style={selectFieldStyle}
+             floatingLabelStyle={selectFieldStyle}
+             >
+               {contactPersonOptions.map((searchOption) =>
+                 <MenuItem key={searchOption.value} value={searchOption.value} primaryText={searchOption.label} />
+               )}
+            </SelectField>
           </MuiThemeProvider>
 
         {this.state.contactPersonCode === "OTHERCLIENT" && (
           <MuiThemeProvider>
             <div>
-              <SelectField
-               floatingLabelText="Find Contact Person by..."
-               onChange={this.setSearchTypeCode}
-               style={selectFieldStyle}
-               floatingLabelStyle={selectFieldStyle}
-               className="custom-width"
-               >
-                 {searchOptions.map((searchOption) =>
-                   <MenuItem key={searchOption.value} value={searchOption.value} primaryText={searchOption.label} />
-                 )}
-              </SelectField>
+              <div>
+                <h3>Link Client as Contact Person</h3>
+                <SelectField
+                 floatingLabelText="Find Contact Person by..."
+                 onChange={this.setSearchTypeCode}
+                 style={selectFieldStyle}
+                 floatingLabelStyle={selectFieldStyle}
+                 className="custom-width"
+                 >
+                   {searchOptions.map((searchOption) =>
+                     <MenuItem key={searchOption.value} value={searchOption.value} primaryText={searchOption.label} />
+                   )}
+                </SelectField>
+              </div>
               {
-                this.state.searchTypeLabel != "" && (
-                  <div>
-                    <div className="custom-width">
+                <div>
+                  <div className="custom-width">
+                    {this.state.searchTypeIndex === 0 &&
                       <Input
                         label={searchOptions[this.state.searchTypeIndex].label}
                         id="search"
-                        value={this.state.searchKeyword}
-                        onChange={this.onChange("searchKeyword")}
+                        value={this.state.searchEmailKeyword}
+                        onChange={this.onChange("searchEmailKeyword")}
                         placeholder={
                           searchOptions[this.state.searchTypeIndex].label
                         }
                       />
+                    }
+                    {this.state.searchTypeIndex !== 0 &&
+                      <Input
+                        label={searchOptions[this.state.searchTypeIndex].label}
+                        id="search"
+                        value={this.state.searchIdKeyword}
+                        onChange={this.onChange("searchIdKeyword")}
+                        placeholder={
+                          searchOptions[this.state.searchTypeIndex].label
+                        }
+                      />
+                    }
                     </div>
-                    <div className="custom-width-button">
-                      <button
-                        className="uikit-btn main-btn"
-                        id="task-list-search-btn"
-                        onClick={this.searchByKeywords}
-                      >
-                        Search
-                      </button>
-                    </div>
+                  <div className="custom-width-button">
+                    <button
+                      className="uikit-btn main-btn"
+                      id="task-list-search-btn"
+                      onClick={this.searchByKeywords}
+                    >
+                      Search
+                    </button>
                   </div>
-              )}
+                </div>
+              }
             </div>
           </MuiThemeProvider>
         )}
@@ -196,6 +191,7 @@ class ContactPerson extends React.Component {
         {this.state.contactPersonCode === "OTHER" && (
           <MuiThemeProvider>
           <div>
+            <h3>Detail of Someone Else as Contact Person</h3>
             <div className="half-area">
               <Input
                 label="First Name"
