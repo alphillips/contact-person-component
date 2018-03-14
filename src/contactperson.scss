@@ -1,4 +1,7 @@
+$darken-text: darken(whitesmoke, 30%);
+
 .contact-person-component {
+  position: relative;
   .custom-width {
     width: 30%!important;
     float: left;
@@ -17,6 +20,11 @@
   .search-button {
     background: transparent;
     border: 0;
+    cursor:pointer;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    color: $darken-text;
     &:before {
       content: " ";
       display: inline-block;
@@ -28,5 +36,9 @@
       pointer-events: inherit !important;
       background-image: url('./search.svg')
     }
+  }
+
+  .other-client-container{
+    position: relative;
   }
 }

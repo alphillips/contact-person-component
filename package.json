@@ -28,6 +28,7 @@
     "@react-ag-components/input": "latest",
     "@react-ag-components/radiobutton": "latest",
     "@react-ag-components/reference-data-selector": "latest",
+    "npm-run-all": "^4.1.2",
     "react-google-autocomplete": "^1.0.13"
   },
   "peerDependencies": {

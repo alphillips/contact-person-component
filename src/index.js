@@ -131,8 +131,8 @@ class ContactPerson extends React.Component {
         }
 
 
-        {this.state.contactPersonCode === "OTHERCLIENT" || window.IS_STAFF && (
-          <div>
+        {(this.state.contactPersonCode === "OTHERCLIENT" || window.IS_STAFF) && (
+          <div className="other-client-container">
             <MuiThemeProvider>
               <Input
                 label={"Contact Person Email"}
@@ -144,7 +144,7 @@ class ContactPerson extends React.Component {
                 }
               />
             </MuiThemeProvider>
-            <button label="blah" className="search-button"/>
+            <button className="search-button">Search</button>
           </div>
         )}
         {this.state.contactPersonCode === "OTHER" && (
