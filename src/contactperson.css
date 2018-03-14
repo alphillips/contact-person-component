@@ -1,0 +1,13 @@
+.contact-person-component .custom-width {
+  width: 30% !important;
+  float: left;
+  margin-right: 20px; }
+
+.contact-person-component .custom-width.search {
+  width: 20% !important; }
+
+.contact-person-component .custom-width-button {
+  display: inline-block; }
+
+.contact-person-component .custom-width-button button {
+  line-height: 17px; }

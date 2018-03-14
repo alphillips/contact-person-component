@@ -7,15 +7,25 @@ import RadioButton from '@react-ag-components/radiobutton'
 import EmailInput from '@react-ag-components/email-input'
 import Input from "@react-ag-components/input";
 import Address from "@react-ag-components/address";
+import SelectField from "material-ui/SelectField";
+import { Card, CardActions, CardHeader, CardText } from "material-ui/Card";
+import MenuItem from 'material-ui/MenuItem';
 
 import "./contactperson.css";
+
+const searchOptions = [
+  { value: "clientEmail", label: "Client Email" },
+  { value: "clientId", label: "Client ID" }
+];
 
 class ContactPerson extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       contactPerson: props.contactPerson,
-      contactPersonCode: "ME"
+      contactPersonCode: "ME",
+      searchTypeCode: "",
+      searchTypeIndex: 0
     };
   }
 
@@ -40,6 +50,23 @@ class ContactPerson extends React.Component {
     }));
     {this.props.markDirty !== undefined &&
       this.props.markDirty("contactPersonCode", contactPersonCode)
+    }
+  };
+
+  setSearchTypeCode = (event, index) => {
+    this.setState((prevState, props) => ({
+      searchTypeCode: searchOptions[index].value,
+      searchTypeLabel: searchOptions[index].label,
+      searchTypeIndex: index,
+      searchResults: null,
+      validationMessages: null,
+      selectFieldClassName: "medium-width"
+    }));
+
+    if(searchOptions[index].label === "Client Name") {
+      this.setState((prevState, props) => ({
+        selectFieldClassName: "small-width"
+      }));
     }
   };
 
@@ -81,32 +108,90 @@ class ContactPerson extends React.Component {
       fontFamily:
         '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif'
     };
+
+    const selectFieldStyle = {
+      width: "100%",
+      'color':'#999'
+    };
+
     return (
-      <div>
+      <div className="contact-person-component">
         <h3>Contact Person</h3>
-        <MuiThemeProvider>
-          <RadioButtonGroup
-            name="contactPersonMode"
-            defaultSelected={this.state.contactPersonCode}
-            onChange={this.setContactPersonCode}
-            valueSelected={this.state.contactPersonCode}
-          >
+          <MuiThemeProvider>
+            <RadioButtonGroup
+              name="contactPersonMode"
+              defaultSelected={this.state.contactPersonCode}
+              onChange={this.setContactPersonCode}
+              valueSelected={this.state.contactPersonCode}
+            >
+            {!window.IS_STAFF &&
+              <RadioButton
+                value="ME"
+                label="Current User is Contact Person"
+                style={checkStyle}
+                labelStyle={checkLabelStyle}
+                name="radio-contactPersonMode"
+              />
+            }
             <RadioButton
-              value="ME"
-              label="I want to be the contact person "
+              value="OTHERCLIENT"
+              label="Another Client is Contact Person"
               style={checkStyle}
               labelStyle={checkLabelStyle}
               name="radio-contactPersonMode"
             />
-            <RadioButton
-              value="OTHER"
-              label="I want to nominate someone else to be the contact person"
-              style={checkStyle}
-              labelStyle={checkLabelStyle}
-              name="radio-contactPersonMode"
-            />
-          </RadioButtonGroup>
-        </MuiThemeProvider>
+              <RadioButton
+                value="OTHER"
+                label="Someone else is Contact Person"
+                style={checkStyle}
+                labelStyle={checkLabelStyle}
+                name="radio-contactPersonMode"
+              />
+            </RadioButtonGroup>
+          </MuiThemeProvider>
+
+        {this.state.contactPersonCode === "OTHERCLIENT" && (
+          <MuiThemeProvider>
+            <div>
+              <SelectField
+               floatingLabelText="Find Contact Person by..."
+               onChange={this.setSearchTypeCode}
+               style={selectFieldStyle}
+               floatingLabelStyle={selectFieldStyle}
+               className="custom-width"
+               >
+                 {searchOptions.map((searchOption) =>
+                   <MenuItem key={searchOption.value} value={searchOption.value} primaryText={searchOption.label} />
+                 )}
+              </SelectField>
+              {
+                this.state.searchTypeLabel != "" && (
+                  <div>
+                    <div className="custom-width">
+                      <Input
+                        label={searchOptions[this.state.searchTypeIndex].label}
+                        id="search"
+                        value={this.state.searchKeyword}
+                        onChange={this.onChange("searchKeyword")}
+                        placeholder={
+                          searchOptions[this.state.searchTypeIndex].label
+                        }
+                      />
+                    </div>
+                    <div className="custom-width-button">
+                      <button
+                        className="uikit-btn main-btn"
+                        id="task-list-search-btn"
+                        onClick={this.searchByKeywords}
+                      >
+                        Search
+                      </button>
+                    </div>
+                  </div>
+              )}
+            </div>
+          </MuiThemeProvider>
+        )}
 
         {this.state.contactPersonCode === "OTHER" && (
           <MuiThemeProvider>
