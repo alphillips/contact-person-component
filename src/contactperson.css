@@ -12,15 +12,14 @@
 
 .contact-person-component .search-button {
   background: transparent;
-  border: 0;
-  cursor: pointer;
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  margin: 0 .4em -8px 0;
-  background-repeat: no-repeat;
-  background-size: auto 22px;
-  pointer-events: inherit;
-  content: " " .contact-person-component .search-button; }
-  .contact-person-component .search-button :before {
+  border: 0; }
+  .contact-person-component .search-button:before {
+    content: " ";
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin: 0 .4em -8px 0;
+    background-repeat: no-repeat;
+    background-size: auto 22px;
+    pointer-events: inherit !important;
     background-image: url("./search.svg"); }

@@ -15,7 +15,7 @@ import "./contactperson.css";
 
 const contactPersonOptions = [
   { value: "ME", label: "I am the contact person" },
-  { value: "OTHERCLIENT", label: "Nominate someone else as the contact person" }
+  { value: "OTHERCLIENT", label: "Someone else is the contact person" }
 ];
 
 class ContactPerson extends React.Component {
@@ -114,6 +114,7 @@ class ContactPerson extends React.Component {
     return (
       <div className="contact-person-component">
         <h3>Contact Person</h3>
+        {!window.IS_STAFF &&
           <MuiThemeProvider>
             <SelectField
              floatingLabelText="Contact Person Type..."
@@ -127,12 +128,14 @@ class ContactPerson extends React.Component {
                )}
             </SelectField>
           </MuiThemeProvider>
+        }
 
-        {this.state.contactPersonCode === "OTHERCLIENT" && (
+
+        {this.state.contactPersonCode === "OTHERCLIENT" || window.IS_STAFF && (
           <div>
             <MuiThemeProvider>
               <Input
-                label={"Client Email or Client ID"}
+                label={"Contact Person Email"}
                 id="search"
                 value={this.state.searchEmailKeyword}
                 onChange={this.onChange("searchEmailKeyword")}
