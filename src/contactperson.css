@@ -1,39 +1,32 @@
 .contact-person-component {
   position: relative; }
-
-.contact-person-component .custom-width {
-  width: 30% !important;
-  float: left;
-  margin-right: 20px; }
-
-.contact-person-component .custom-width.search {
-  width: 20% !important; }
-
-.contact-person-component .custom-width-button {
-  display: inline-block; }
-
-.contact-person-component .custom-width-button button {
-  line-height: 17px; }
-
-.contact-person-component .search-button {
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  right: 0;
-  color: darkgray; }
-
-.contact-person-component .search-button:before {
-  content: " ";
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  margin: 0 .4em -8px 0;
-  background-repeat: no-repeat;
-  background-size: auto 22px;
-  pointer-events: inherit !important;
-  background-image: url("./search.svg"); }
-
-.contact-person-component .other-client-container {
-  position: relative; }
+  .contact-person-component .custom-width {
+    width: 30% !important;
+    float: left;
+    margin-right: 20px; }
+    .contact-person-component .custom-width.search {
+      width: 20% !important; }
+  .contact-person-component .custom-width-button {
+    display: inline-block; }
+    .contact-person-component .custom-width-button button {
+      line-height: 17px; }
+  .contact-person-component .search-button {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    color: darkgray; }
+    .contact-person-component .search-button:before {
+      content: " ";
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      margin: 0 .4em -8px 0;
+      background-repeat: no-repeat;
+      background-size: auto 22px;
+      pointer-events: inherit !important;
+      background-image: url("./search.svg"); }
+  .contact-person-component .other-client-container {
+    position: relative; }

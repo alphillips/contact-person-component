@@ -27,7 +27,6 @@ class ContactPerson extends React.Component {
       searchTypeCode: "",
       searchTypeIndex: 0,
       searchEmailKeyword: "",
-      searchIdKeyword: "",
       clientDetail: {"firstName":"Jamie"}
     };
   }
@@ -54,17 +53,20 @@ class ContactPerson extends React.Component {
     }))
   };
 
-  findClientContactPerson = () => {
-    let searchData = {}
-    searchData.clientEmail = this.state.searchEmailKeyword
-    searchData.clientId = this.state.searchIdKeyword
-    // api.findClientContactPerson(searchData).then(
-    //   data => {
-    //     this.setState((prevState, props) => ({
-    //       clientDetail: data
-    //     }))
-    //   }
-    // )
+  findClientContactPerson = (e) => {
+      let searchData = {}
+      searchData.clientEmail = this.state.searchEmailKeyword
+      this.setState((prevState, props) => ({
+        searchEmailKeyword:e.target.value
+      }))
+      console.log(this.state.searchEmailKeyword.length)
+      // api.findClientContactPerson(searchData).then(
+      //   data => {
+      //     this.setState((prevState, props) => ({
+      //       clientDetail: data
+      //     }))
+      //   }
+      // )
   }
 
   onChange = field => {
@@ -137,10 +139,9 @@ class ContactPerson extends React.Component {
               <Input
                 label={"Contact Person Email"}
                 id="search"
-                value={this.state.searchEmailKeyword}
-                onChange={this.onChange("searchEmailKeyword")}
+                onChange={this.findClientContactPerson}
                 placeholder={
-                  "Client Email or Client ID"
+                  "Client Email"
                 }
               />
             </MuiThemeProvider>
