@@ -14,4 +14,20 @@
       line-height: 17px;
     }
   }
+  .search-button {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin: 0 .4em -8px 0;
+    background-repeat: no-repeat;
+    background-size: auto 22px;
+    pointer-events: inherit;
+    content: " "
+    &:before {
+      background-image: url('./search.svg')
+    }
+  }
 }

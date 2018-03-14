@@ -13,14 +13,9 @@ import MenuItem from 'material-ui/MenuItem';
 
 import "./contactperson.css";
 
-const searchOptions = [
-  { value: "clientEmail", label: "Client Email" },
-  { value: "clientId", label: "Client ID" }
-];
 const contactPersonOptions = [
-  { value: "ME", label: "Current User is Contact Person" },
-  { value: "OTHERCLIENT", label: "Set Another Client as Contact Person" },
-  { value: "OTHER", label: "Nominate Someone Else as Contact Person" }
+  { value: "ME", label: "I am the contact person" },
+  { value: "OTHERCLIENT", label: "Nominate someone else as the contact person" }
 ];
 
 class ContactPerson extends React.Component {
@@ -28,11 +23,12 @@ class ContactPerson extends React.Component {
     super(props);
     this.state = {
       contactPerson: props.contactPerson,
-      contactPersonCode: "ME",
+      contactPersonCode: "",
       searchTypeCode: "",
       searchTypeIndex: 0,
       searchEmailKeyword: "",
-      searchIdKeyword: ""
+      searchIdKeyword: "",
+      clientDetail: {"firstName":"Jamie"}
     };
   }
 
@@ -58,16 +54,18 @@ class ContactPerson extends React.Component {
     }))
   };
 
-  setSearchTypeCode = (event, index) => {
-    this.setState((prevState, props) => ({
-      searchTypeCode: searchOptions[index].value,
-      searchTypeLabel: searchOptions[index].label,
-      searchTypeIndex: index,
-      searchResults: null,
-      searchEmailKeyword: "",
-      searchIdKeyword: ""
-    }));
-  };
+  findClientContactPerson = () => {
+    let searchData = {}
+    searchData.clientEmail = this.state.searchEmailKeyword
+    searchData.clientId = this.state.searchIdKeyword
+    // api.findClientContactPerson(searchData).then(
+    //   data => {
+    //     this.setState((prevState, props) => ({
+    //       clientDetail: data
+    //     }))
+    //   }
+    // )
+  }
 
   onChange = field => {
     return value => {
@@ -131,67 +129,25 @@ class ContactPerson extends React.Component {
           </MuiThemeProvider>
 
         {this.state.contactPersonCode === "OTHERCLIENT" && (
-          <MuiThemeProvider>
-            <div>
-              <div>
-                <h3>Link Client as Contact Person</h3>
-                <SelectField
-                 floatingLabelText="Find Contact Person by..."
-                 onChange={this.setSearchTypeCode}
-                 style={selectFieldStyle}
-                 floatingLabelStyle={selectFieldStyle}
-                 className="custom-width"
-                 >
-                   {searchOptions.map((searchOption) =>
-                     <MenuItem key={searchOption.value} value={searchOption.value} primaryText={searchOption.label} />
-                   )}
-                </SelectField>
-              </div>
-              {
-                <div>
-                  <div className="custom-width">
-                    {this.state.searchTypeIndex === 0 &&
-                      <Input
-                        label={searchOptions[this.state.searchTypeIndex].label}
-                        id="search"
-                        value={this.state.searchEmailKeyword}
-                        onChange={this.onChange("searchEmailKeyword")}
-                        placeholder={
-                          searchOptions[this.state.searchTypeIndex].label
-                        }
-                      />
-                    }
-                    {this.state.searchTypeIndex !== 0 &&
-                      <Input
-                        label={searchOptions[this.state.searchTypeIndex].label}
-                        id="search"
-                        value={this.state.searchIdKeyword}
-                        onChange={this.onChange("searchIdKeyword")}
-                        placeholder={
-                          searchOptions[this.state.searchTypeIndex].label
-                        }
-                      />
-                    }
-                    </div>
-                  <div className="custom-width-button">
-                    <button
-                      className="uikit-btn main-btn"
-                      id="task-list-search-btn"
-                      onClick={this.searchByKeywords}
-                    >
-                      Search
-                    </button>
-                  </div>
-                </div>
-              }
-            </div>
-          </MuiThemeProvider>
+          <div>
+            <MuiThemeProvider>
+              <Input
+                label={"Client Email or Client ID"}
+                id="search"
+                value={this.state.searchEmailKeyword}
+                onChange={this.onChange("searchEmailKeyword")}
+                placeholder={
+                  "Client Email or Client ID"
+                }
+              />
+            </MuiThemeProvider>
+            <button label="blah" className="search-button"/>
+          </div>
         )}
-
         {this.state.contactPersonCode === "OTHER" && (
           <MuiThemeProvider>
           <div>
-            <h3>Detail of Someone Else as Contact Person</h3>
+            <h3>Detail of Contact Person</h3>
             <div className="half-area">
               <Input
                 label="First Name"
