@@ -22,7 +22,6 @@ class ContactPerson extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      contactPerson: props.contactPerson,
       contactPersonCode: "",
       searchTypeCode: "",
       contactPerson: props.contactPerson,
@@ -38,7 +37,7 @@ class ContactPerson extends React.Component {
   }
 
   componentWillMount = () => {
-    if(this.state.contactPerson) {
+    if(this.state.contactPerson!==undefined) {
       this.setState((prevState, props) => ({
         contactPersonCode: (this.state.contactPerson.currentUserIsContactPerson === "false") ? "OTHERCLIENT" : "ME",
       }))
