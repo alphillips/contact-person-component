@@ -7,23 +7,33 @@ import './base.css'
 import ContactPerson from '../../src'
 
 // window.IS_STAFF = true
-let contactPerson = {}
-contactPerson =
+let contactPerson =
 {
   "contactPerson": {
-    "contactPersonCode": "OTHER",
-    "sameAsRequester": false,
-    "firstName": "contactFirst",
-    "lastName": "contactLast",
-    "email": "first.last@gmail.com",
-    "phone": "23445",
-    "postalAddress": {
-      "addressLine1": "5th Ave",
-      "addressLine2": "",
-      "addressLine3": "",
-      "suburb": "New York",
-      "state": "NY",
-      "country": "US"
+    "currentUserIsContactPerson": "false",
+    "otherClientDetails": {
+      "clientId": "65465456",
+      "clientEmail": "",
+      "personDetails": {
+        "firstName": "",
+        "lastName": "",
+        "phone": "",
+        "mobile": ""
+      }
+    },
+    "otherPersonDetails": {
+      "firstName": "",
+      "lastName": "",
+      "email": "",
+      "phone": "",
+      "mobile": "",
+      "postalAddress": {
+        "addressLine1": "",
+        "suburb": "",
+        "state": "",
+        "postcode": "",
+        "country": ""
+      }
     }
   }
 }
@@ -31,7 +41,7 @@ contactPerson =
 let Demo = React.createClass({
   render() {
     return <div className="uikit-body">
-      <ContactPerson ref="contactPerson" contactPerson={contactPerson}  />
+      <ContactPerson ref="contactPerson" contactPerson={contactPerson.contactPerson}  />
     </div>
   }
 })

@@ -25,26 +25,37 @@ class ContactPerson extends React.Component {
       contactPerson: props.contactPerson,
       contactPersonCode: "",
       searchTypeCode: "",
-      clientDetail: {"firstName":"Cindy"},
+      contactPerson: props.contactPerson || {},
       searchEmailKeyword: "",
       foundClient: false,
       foundContactFirstName:"",
-      linkContactPerson: ""
+      linkContactPerson: "",
+      screenRegistration: JSON.stringify(props.contactPerson) === "{}" ? true : false
     };
-    this.hasMatch = true
   }
 
   componentWillMount = () => {
-    if(this.state.contactPerson !== undefined) {
+    if(!this.state.screenRegistration) {
       this.setState((prevState, props) => ({
-        contactPersonCode: (this.state.contactPerson.currentUserIsContactPerson === false) ? "OTHER" : "ME",
-        currentUserIsContactPerson: this.state.contactPerson.currentUserIsContactPerson || true,
-        contactPersonAddress: this.state.contactPerson.postalAddress || {},
-        contactEmail: this.state.contactPerson.email || "",
-        contactPhone: this.state.contactPerson.phone || "",
-        contactFirstName: this.state.contactPerson.firstName || "",
-        contactLastName: this.state.contactPerson.lastName || ""
+        contactPersonCode: (this.state.contactPerson.currentUserIsContactPerson === "false") ? "OTHERCLIENT" : "ME",
       }))
+      if(JSON.stringify(this.state.contactPerson.otherClientDetails) !== "{}") {
+        this.setState((prevState, props) => ({
+          clientId: this.state.contactPerson.otherClientDetails.clientId,
+          clientEmail: this.state.contactPerson.otherClientDetails.clientEmail,
+          personDetail: this.state.contactPerson.otherClientDetails.personDetails
+        }))
+      }
+      if(JSON.stringify(this.state.contactPerson.otherPersonDetails) !== "{}") {
+        this.setState((prevState, props) => ({
+          otherPersonDetailsFirstName: this.state.contactPerson.otherPersonDetails.firstName,
+          otherPersonDetailsLastName: this.state.contactPerson.otherPersonDetails.lastName,
+          otherPersonDetailsEmail: this.state.contactPerson.otherPersonDetails.email,
+          otherPersonDetailsPhone: this.state.contactPerson.otherPersonDetails.phone,
+          otherPersonDetailsMobile: this.state.contactPerson.otherPersonDetails.mobile,
+          otherPersonDetailsPostalAddress: this.state.contactPerson.otherPersonDetails.postalAddress
+        }))
+      }
     }
   }
 
@@ -78,11 +89,11 @@ class ContactPerson extends React.Component {
     this.setState((prevState, props) => ({
       showVerifyButton: false
     }))
-    if(this.hasMatch) {
+    if(JSON.stringify(this.state.contactPerson) !== "{}") {
       // send to api
       this.setState((prevState, props) => ({
-        contactFirstName: this.state.clientDetail.firstName,
-        foundContactFirstName: this.state.clientDetail.firstName,
+        contactFirstName: this.state.contactPerson.firstName,
+        foundContactFirstName: this.state.contactPerson.firstName,
         contactEmail: this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : "",
         foundClient: true,
         showManualClientEntry: false
