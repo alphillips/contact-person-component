@@ -33,7 +33,6 @@ class ContactPerson extends React.Component {
       linkContactPerson: "",
       changedData: true,
       showVerifyButton: false,
-      // foundClientDetail: {}
       foundClientDetail: {"firstName" : "Cindy"}
     };
   }
