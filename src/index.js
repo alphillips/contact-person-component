@@ -28,7 +28,8 @@ class ContactPerson extends React.Component {
       clientDetail: {"firstName":"Cindy"},
       searchEmailKeyword: "",
       foundClient: false,
-      foundContactFirstName:""
+      foundContactFirstName:"",
+      linkContactPerson: ""
     };
   }
 
@@ -58,6 +59,13 @@ class ContactPerson extends React.Component {
         this.props.markDirty("contactPersonCode", contactPersonCode)
       }
   };
+
+  linkContactPerson = (e) => {
+    const linkContactPersonCode = e.target.value;
+    this.setState((prevState, props) => ({
+      linkContactPerson: linkContactPersonCode
+    }))
+  }
 
   isValidEmail = (value) => {
     return (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value))
@@ -202,44 +210,40 @@ class ContactPerson extends React.Component {
 
               {this.state.foundClient &&
                 <div>
-                  {!this.state.showManualClientEntry &&
                     <div>
-
                       <MuiThemeProvider>
-
                         <RadioButtonGroup
-                          name="contactPersonMode"
-                          defaultSelected={"LINK"}
-                          onChange={this.toggleManualClientEntry}
-                          valueSelected={"LINK"}
+                          name="linkContactPersonMode"
+                          defaultSelected={this.state.linkContactPerson}
+                          onChange={this.linkContactPerson}
+                          valueSelected={this.state.linkContactPerson}
                         >
                           {!window.IS_STAFF &&
                             <RadioButton
                               value="LINK"
-                              label={"Existing client has been found with this email address, link contact person to "+ this.state.foundContactFirstName}
+                              label={"Existing client has been found with this email address. link contact person to "+ this.state.foundContactFirstName + "."}
                               style={checkStyle}
                               labelStyle={checkLabelStyle}
-                              name="radio-contactPersonMode"
+                              name="radio-linkContactPerson"
                             />
                           }
                           <RadioButton
-                            value="OTHERCLIENT"
+                            value="NOTLINK"
                             label="Don't link to this account, enter details manually."
                             style={checkStyle}
                             labelStyle={checkLabelStyle}
-                            name="radio-contactPersonMode"
+                            name="radio-linkContactPerson"
                           />
 
                         </RadioButtonGroup>
 
                       </MuiThemeProvider>
                     </div>
-                  }
                 </div>
               }
           </div>
         )}
-        {this.state.showManualClientEntry && this.state.contactPersonCode === "OTHERCLIENT" &&(
+        {(this.state.showManualClientEntry && this.state.contactPersonCode === "OTHERCLIENT") || (this.state.linkContactPerson === "NOTLINK") &&(
           <MuiThemeProvider>
           <div>
             <h3>Detail of Contact Person</h3>
