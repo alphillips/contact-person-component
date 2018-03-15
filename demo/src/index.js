@@ -13,27 +13,27 @@ let contactPerson =
     "currentUserIsContactPerson": "false",
     "otherClientDetails": {
       "clientId": "65465456",
-      "clientEmail": "",
+      "clientEmail": "pak@agriculture.com",
       "personDetails": {
-        "firstName": "",
-        "lastName": "",
-        "phone": "",
-        "mobile": ""
+        "firstName": "Cindy"
+        // "lastName": "Pak",
+        // "phone": "23574457",
+        // "mobile": "0436774457"
       }
     },
     "otherPersonDetails": {
-      "firstName": "",
-      "lastName": "",
-      "email": "",
-      "phone": "",
-      "mobile": "",
-      "postalAddress": {
-        "addressLine1": "",
-        "suburb": "",
-        "state": "",
-        "postcode": "",
-        "country": ""
-      }
+      // "firstName": "Cindy",
+      // "lastName": "Pak",
+      // "email": "pak@agriculture.com",
+      // "phone": "234234",
+      // "mobile": "234234",
+      // "postalAddress": {
+      //   "addressLine1": "5 jason street",
+      //   "suburb": "maroo",
+      //   "state": "stateact",
+      //   "postcode": "234234",
+      //   "country": "bestCountry"
+      // }
     }
   }
 }

@@ -26,11 +26,15 @@ class ContactPerson extends React.Component {
       contactPersonCode: "",
       searchTypeCode: "",
       contactPerson: props.contactPerson || {},
+      clientEmail: "",
       searchEmailKeyword: "",
       foundClient: false,
       foundContactFirstName:"",
       linkContactPerson: "",
-      screenRegistration: JSON.stringify(props.contactPerson) === "{}" ? true : false
+      changedData: true,
+      showVerifyButton: false,
+      // foundClientDetail: {}
+      foundClientDetail: {"firstName" : "Cindy"}
     };
   }
 
@@ -41,19 +45,28 @@ class ContactPerson extends React.Component {
       }))
       if(JSON.stringify(this.state.contactPerson.otherClientDetails) !== "{}") {
         this.setState((prevState, props) => ({
+          linkContactPerson: "LINK",
+          foundClient: true,
+          newSearch: false,
           clientId: this.state.contactPerson.otherClientDetails.clientId,
           clientEmail: this.state.contactPerson.otherClientDetails.clientEmail,
-          personDetail: this.state.contactPerson.otherClientDetails.personDetails
+          searchEmailKeyword: this.state.contactPerson.otherClientDetails.clientEmail,
+          personDetail: this.state.contactPerson.otherClientDetails.personDetails,
+          foundContactFirstName: this.state.contactPerson.otherClientDetails.personDetails.firstName
         }))
       }
       if(JSON.stringify(this.state.contactPerson.otherPersonDetails) !== "{}") {
         this.setState((prevState, props) => ({
-          otherPersonDetailsFirstName: this.state.contactPerson.otherPersonDetails.firstName,
-          otherPersonDetailsLastName: this.state.contactPerson.otherPersonDetails.lastName,
-          otherPersonDetailsEmail: this.state.contactPerson.otherPersonDetails.email,
-          otherPersonDetailsPhone: this.state.contactPerson.otherPersonDetails.phone,
-          otherPersonDetailsMobile: this.state.contactPerson.otherPersonDetails.mobile,
-          otherPersonDetailsPostalAddress: this.state.contactPerson.otherPersonDetails.postalAddress
+          showManualClientEntry: true,
+          foundClient: false,
+          newSearch: false,
+          contactFirstName: this.state.contactPerson.otherPersonDetails.firstName,
+          contactLastName: this.state.contactPerson.otherPersonDetails.lastName,
+          contactEmail: this.state.contactPerson.otherPersonDetails.email,
+          searchEmailKeyword: this.state.contactPerson.otherPersonDetails.email,
+          contactPhone: this.state.contactPerson.otherPersonDetails.phone,
+          contactMobile: this.state.contactPerson.otherPersonDetails.mobile,
+          contactPersonAddress: this.state.contactPerson.otherPersonDetails.postalAddress
         }))
       }
     }
@@ -67,7 +80,8 @@ class ContactPerson extends React.Component {
       foundClient: false,
       showManualClientEntry:false,
       linkContactPerson: "",
-      showVerifyButton: contactPersonCode === "OTHERCLIENT" ? true : false
+      showVerifyButton: contactPersonCode === "OTHERCLIENT" ? true : false,
+      newSearch: true
     }));
     {this.props.markDirty !== undefined &&
       this.props.markDirty("contactPersonCode", contactPersonCode)
@@ -87,13 +101,14 @@ class ContactPerson extends React.Component {
 
   triggerFindClientContactPerson = () => {
     this.setState((prevState, props) => ({
-      showVerifyButton: false
+      showVerifyButton: false,
+      newSearch: true
     }))
-    if(JSON.stringify(this.state.contactPerson) !== "{}") {
+    if(JSON.stringify(this.state.foundClientDetail) !== "{}") {
       // send to api
       this.setState((prevState, props) => ({
-        contactFirstName: this.state.contactPerson.firstName,
-        foundContactFirstName: this.state.contactPerson.firstName,
+        contactFirstName: this.state.foundClientDetail.firstName,
+        foundContactFirstName: this.state.foundClientDetail.firstName,
         contactEmail: this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : "",
         foundClient: true,
         showManualClientEntry: false
@@ -111,7 +126,8 @@ class ContactPerson extends React.Component {
       this.setState((prevState, props) => ({
         searchEmailKeyword: value,
         foundClient: false,
-        showVerifyButton: true
+        showVerifyButton: true,
+        newSearch: true
       }))
     }
   }
@@ -214,7 +230,7 @@ class ContactPerson extends React.Component {
 
               {this.state.foundClient &&
                 <div>
-                  <p className="info-text">Existing client has been found, update email address or contact id to change contact person.</p>
+                  <p className="info-text">{this.state.newSearch && "Existing client has been found. "} Update email address or client id to change contact person.</p>
                     <div>
                       <MuiThemeProvider>
                         <RadioButtonGroup
@@ -226,7 +242,7 @@ class ContactPerson extends React.Component {
                           {!window.IS_STAFF &&
                             <RadioButton
                               value="LINK"
-                              label={"Use this existing client "+ "'" + this.state.foundContactFirstName + "'" + " as the contact person."}
+                              label={this.state.newSearch ? ("Use this existing client. '"  + this.state.foundContactFirstName  + "' as the contact person.") : (this.state.foundContactFirstName + " is the contact person.")}
                               style={checkStyle}
                               labelStyle={checkLabelStyle}
                               name="radio-linkContactPerson"
@@ -252,7 +268,7 @@ class ContactPerson extends React.Component {
           <MuiThemeProvider>
           <div>
             {!this.state.foundClient &&
-              <p className="info-text">There is no client match, update email address or client id to change contact person.</p>
+              <p className="info-text">{this.state.newSearch && "There is no client match. "} Update email address or client id to change contact person.</p>
             }
             <h3>Detail of Contact Person</h3>
             <div className="half-area">
