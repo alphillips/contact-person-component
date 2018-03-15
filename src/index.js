@@ -25,7 +25,7 @@ class ContactPerson extends React.Component {
       contactPerson: props.contactPerson,
       contactPersonCode: "",
       searchTypeCode: "",
-      contactPerson: props.contactPerson || {},
+      contactPerson: props.contactPerson,
       clientEmail: "",
       searchEmailKeyword: "",
       foundClient: false,
@@ -38,7 +38,7 @@ class ContactPerson extends React.Component {
   }
 
   componentWillMount = () => {
-    if(!this.state.screenRegistration) {
+    if(this.state.contactPerson) {
       this.setState((prevState, props) => ({
         contactPersonCode: (this.state.contactPerson.currentUserIsContactPerson === "false") ? "OTHERCLIENT" : "ME",
       }))
