@@ -37,7 +37,7 @@ class ContactPerson extends React.Component {
   }
 
   componentWillMount = () => {
-    if(this.state.contactPerson!==undefined) {
+    if(this.state.contactPerson) {
       this.setState((prevState, props) => ({
         contactPersonCode: (this.state.contactPerson.currentUserIsContactPerson === "false") ? "OTHERCLIENT" : "ME",
       }))
