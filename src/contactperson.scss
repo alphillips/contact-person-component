@@ -18,24 +18,6 @@ $darken-text: darken(whitesmoke, 30%);
     }
   }
   .search-button {
-    background: transparent;
-    border: 0;
-    cursor:pointer;
-    position: absolute;
-    top: 30px;
-    right: 0;
-    color: $darken-text;
-    &:before {
-      content: " ";
-      display: inline-block;
-      width: 24px;
-      height: 24px;
-      margin: 0 .4em -8px 0;
-      background-repeat: no-repeat;
-      background-size: auto 22px;
-      pointer-events: inherit !important;
-      background-image: url('./search.svg')
-    }
   }
 
   .info-text {
