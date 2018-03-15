@@ -49,13 +49,14 @@ class ContactPerson extends React.Component {
   }
 
   setContactPersonCode = (event) => {
-  const contactPersonCode = event.target.value;
+    const contactPersonCode = event.target.value;
     this.setState((prevState, props) => ({
       contactPersonCode: contactPersonCode,
       searchEmailKeyword: "",
       foundClient: false,
       showManualClientEntry:false,
-      linkContactPerson: ""
+      linkContactPerson: "",
+      showVerifyButton: contactPersonCode === "OTHERCLIENT" ? true : false
     }));
     {this.props.markDirty !== undefined &&
       this.props.markDirty("contactPersonCode", contactPersonCode)
@@ -284,6 +285,10 @@ class ContactPerson extends React.Component {
           </div>
         </MuiThemeProvider>
         )}
+
+        {!this.state.showVerifyButton &&
+          <button className="uikit-btn main-btn search-button" onClick={this.triggerFindClientContactPerson}>Save</button>
+        }
       </div>
     );
   }
