@@ -22,7 +22,7 @@ $darken-text: darken(whitesmoke, 30%);
     border: 0;
     cursor:pointer;
     position: absolute;
-    top: 50%;
+    top: 30px;
     right: 0;
     color: $darken-text;
     &:before {
@@ -38,7 +38,19 @@ $darken-text: darken(whitesmoke, 30%);
     }
   }
 
+  .info-text {
+    font-size: 80%;
+    color: #666666;
+    max-width: 100%!important;
+    margin-bottom: 0;
+    margin-top: 10px;
+  }
+
   .other-client-container{
     position: relative;
+  }
+
+  a {
+    cursor: pointer;
   }
 }

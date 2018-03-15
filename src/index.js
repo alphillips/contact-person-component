@@ -25,17 +25,18 @@ class ContactPerson extends React.Component {
       contactPerson: props.contactPerson,
       contactPersonCode: "",
       searchTypeCode: "",
-      searchTypeIndex: 0,
+      clientDetail: {"firstName":"Cindy"},
       searchEmailKeyword: "",
-      clientDetail: {"firstName":"Jamie"}
+      foundClient: false,
+      foundContactFirstName:""
     };
   }
 
   componentWillMount = () => {
     if(this.state.contactPerson !== undefined) {
       this.setState((prevState, props) => ({
-        contactPersonCode: (this.state.contactPerson.sameAsRequester === false) ? "OTHER" : "ME",
-        sameAsRequester: this.state.contactPerson.sameAsRequester || true,
+        contactPersonCode: (this.state.contactPerson.currentUserIsContactPerson === false) ? "OTHER" : "ME",
+        currentUserIsContactPerson: this.state.contactPerson.currentUserIsContactPerson || true,
         contactPersonAddress: this.state.contactPerson.postalAddress || {},
         contactEmail: this.state.contactPerson.email || "",
         contactPhone: this.state.contactPerson.phone || "",
@@ -45,28 +46,59 @@ class ContactPerson extends React.Component {
     }
   }
 
-  setContactPersonCode = (event, index) => {
-    this.setState((prevState, props) => ({
-      contactPersonCode: contactPersonOptions[index].value,
-      contactPersonLabel: contactPersonOptions[index].label,
-      contactPersonIndex: index
-    }))
+  setContactPersonCode = (event) => {
+    const contactPersonCode = event.target.value;
+      this.setState((prevState, props) => ({
+        contactPersonCode: contactPersonCode,
+        searchEmailKeyword: "",
+        foundClient: false,
+        showManualClientEntry:false
+      }));
+      {this.props.markDirty !== undefined &&
+        this.props.markDirty("contactPersonCode", contactPersonCode)
+      }
   };
 
-  findClientContactPerson = (e) => {
-      let searchData = {}
-      searchData.clientEmail = this.state.searchEmailKeyword
+  isValidEmail = (value) => {
+    return (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value))
+  }
+
+  findClientContactPerson = () => {
+    return value => {
       this.setState((prevState, props) => ({
-        searchEmailKeyword:e.target.value
+        searchEmailKeyword: value
       }))
-      console.log(this.state.searchEmailKeyword.length)
-      // api.findClientContactPerson(searchData).then(
-      //   data => {
-      //     this.setState((prevState, props) => ({
-      //       clientDetail: data
-      //     }))
-      //   }
-      // )
+      if(this.isValidEmail(value)) {
+        // send to api
+        if(this.state.clientDetail.firstName !== "") {
+          this.setState((prevState, props) => ({
+            contactFirstName: this.state.clientDetail.firstName,
+            foundContactFirstName: this.state.clientDetail.firstName,
+            contactEmail: value,
+            foundClient: true,
+            showManualClientEntry: false
+          }))
+        } else {
+          this.setState((prevState, props) => ({
+            foundClient: false,
+            showManualClientEntry: true
+          }))
+        }
+      } else {
+        this.setState((prevState, props) => ({
+          foundClient: false,
+          contactFirstName: ""
+        }))
+      }
+    }
+  }
+
+  triggerFindClientContactPerson = () => {
+    if(this.state.foundClient) {
+      this.setState((prevState, props) => ({
+        showManualClientEntry: false
+      }))
+    }
   }
 
   onChange = field => {
@@ -80,13 +112,19 @@ class ContactPerson extends React.Component {
     };
   };
 
+  toggleManualClientEntry = () => {
+    this.setState((prevState, props) => ({
+      showManualClientEntry: !this.state.showManualClientEntry
+    }))
+  }
+
   getDetails = () => {
    let person = {}
    person.contactPersonCode = this.state.contactPersonCode
     if (this.state.contactPersonCode === 'ME') {
-      person.sameAsRequester = true
+      person.currentUserIsContactPerson = true
     } else {
-      person.sameAsRequester = false
+      person.currentUserIsContactPerson = false
       person.firstName = this.state.contactFirstName
       person.lastName = this.state.contactLastName
 
@@ -118,20 +156,34 @@ class ContactPerson extends React.Component {
         <h3>Contact Person</h3>
         {!window.IS_STAFF &&
           <MuiThemeProvider>
-            <SelectField
-             floatingLabelText="Contact Person Type..."
-             onChange={this.setContactPersonCode}
-             value={this.state.contactPersonCode}
-             style={selectFieldStyle}
-             floatingLabelStyle={selectFieldStyle}
-             >
-               {contactPersonOptions.map((searchOption) =>
-                 <MenuItem key={searchOption.value} value={searchOption.value} primaryText={searchOption.label} />
-               )}
-            </SelectField>
+
+            <RadioButtonGroup
+              name="contactPersonMode"
+              defaultSelected={this.state.contactPersonCode}
+              onChange={this.setContactPersonCode}
+              valueSelected={this.state.contactPersonCode}
+            >
+              {!window.IS_STAFF &&
+                <RadioButton
+                  value="ME"
+                  label="I am the contact person"
+                  style={checkStyle}
+                  labelStyle={checkLabelStyle}
+                  name="radio-contactPersonMode"
+                />
+              }
+              <RadioButton
+                value="OTHERCLIENT"
+                label="Someone else is the contact person"
+                style={checkStyle}
+                labelStyle={checkLabelStyle}
+                name="radio-contactPersonMode"
+              />
+
+            </RadioButtonGroup>
+
           </MuiThemeProvider>
         }
-
 
         {(this.state.contactPersonCode === "OTHERCLIENT" || window.IS_STAFF) && (
           <div className="other-client-container">
@@ -139,40 +191,71 @@ class ContactPerson extends React.Component {
               <Input
                 label={"Contact Person Email"}
                 id="search"
-                onChange={this.findClientContactPerson}
+                value={this.state.searchEmailKeyword}
+                onChange={this.findClientContactPerson()}
                 placeholder={
                   "Client Email"
                 }
               />
             </MuiThemeProvider>
-            <button className="search-button">Search</button>
+            <button className="search-button" onClick={this.triggerFindClientContactPerson}>Search for existing client</button>
+
+              {this.state.foundClient &&
+                <div>
+                  {!this.state.showManualClientEntry &&
+                    <div>
+
+                      <MuiThemeProvider>
+
+                        <RadioButtonGroup
+                          name="contactPersonMode"
+                          defaultSelected={"LINK"}
+                          onChange={this.toggleManualClientEntry}
+                          valueSelected={"LINK"}
+                        >
+                          {!window.IS_STAFF &&
+                            <RadioButton
+                              value="LINK"
+                              label={"Existing client has been found with this email address, link contact person to "+ this.state.foundContactFirstName}
+                              style={checkStyle}
+                              labelStyle={checkLabelStyle}
+                              name="radio-contactPersonMode"
+                            />
+                          }
+                          <RadioButton
+                            value="OTHERCLIENT"
+                            label="Don't link to this account, enter details manually."
+                            style={checkStyle}
+                            labelStyle={checkLabelStyle}
+                            name="radio-contactPersonMode"
+                          />
+
+                        </RadioButtonGroup>
+
+                      </MuiThemeProvider>
+                    </div>
+                  }
+                </div>
+              }
           </div>
         )}
-        {this.state.contactPersonCode === "OTHER" && (
+        {this.state.showManualClientEntry && this.state.contactPersonCode === "OTHERCLIENT" &&(
           <MuiThemeProvider>
           <div>
             <h3>Detail of Contact Person</h3>
             <div className="half-area">
               <Input
-                label="First Name"
+                label="First name"
                 id="contact-name"
                 value={this.state.contactFirstName}
                 onChange={this.onChange("contactFirstName")}
                 required={true}
               />
               <Input
-                label="Last Name"
+                label="Last name"
                 id="contact-name"
                 value={this.state.contactLastName}
                 onChange={this.onChange("contactLastName")}
-                required={true}
-              />
-
-              <EmailInput
-                label="Email"
-                id="contact-email"
-                value={this.state.contactEmail}
-                onChange={this.onChange("contactEmail")}
                 required={true}
               />
 
@@ -186,7 +269,7 @@ class ContactPerson extends React.Component {
             </div>
 
             <Address
-              label="Postal Address"
+              label="Postal address"
               value={this.state.contactPersonAddress}
               onChange={this.onChange("contactPersonAddress")}
             />
