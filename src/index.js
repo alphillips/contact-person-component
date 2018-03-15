@@ -25,7 +25,7 @@ class ContactPerson extends React.Component {
       contactPerson: props.contactPerson,
       contactPersonCode: "",
       searchTypeCode: "",
-      clientDetail: {"firstName":"Cindy"},
+      clientDetail: {"firstName":""},
       searchEmailKeyword: "",
       foundClient: false,
       foundContactFirstName:"",
@@ -53,7 +53,8 @@ class ContactPerson extends React.Component {
         contactPersonCode: contactPersonCode,
         searchEmailKeyword: "",
         foundClient: false,
-        showManualClientEntry:false
+        showManualClientEntry:false,
+        linkContactPerson: ""
       }));
       {this.props.markDirty !== undefined &&
         this.props.markDirty("contactPersonCode", contactPersonCode)
@@ -210,6 +211,7 @@ class ContactPerson extends React.Component {
 
               {this.state.foundClient &&
                 <div>
+                  <p className="info-text">Existing client has been found with this email address, update email address to change contact person.</p>
                     <div>
                       <MuiThemeProvider>
                         <RadioButtonGroup
@@ -221,7 +223,7 @@ class ContactPerson extends React.Component {
                           {!window.IS_STAFF &&
                             <RadioButton
                               value="LINK"
-                              label={"Existing client has been found with this email address. link contact person to "+ this.state.foundContactFirstName + "."}
+                              label={"Link contact person to "+ this.state.foundContactFirstName + "."}
                               style={checkStyle}
                               labelStyle={checkLabelStyle}
                               name="radio-linkContactPerson"
@@ -243,9 +245,10 @@ class ContactPerson extends React.Component {
               }
           </div>
         )}
-        {(this.state.showManualClientEntry && this.state.contactPersonCode === "OTHERCLIENT") || (this.state.linkContactPerson === "NOTLINK") &&(
+        {(this.state.showManualClientEntry  || (this.state.linkContactPerson === "NOTLINK")) &&(
           <MuiThemeProvider>
           <div>
+            <p className="info-text">There is no client match with this email address, update email address to change contact person.</p>
             <h3>Detail of Contact Person</h3>
             <div className="half-area">
               <Input
