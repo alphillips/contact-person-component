@@ -33,7 +33,8 @@ class ContactPerson extends React.Component {
       changedData: true,
       showVerifyButton: false,
       foundClientDetail: {"firstName" : "Cindy"},
-      contactPersonDone: true
+      contactPersonDone: true,
+      linkContactPerson:"LINK"
     };
   }
 
@@ -329,7 +330,7 @@ class ContactPerson extends React.Component {
         )}
 
         {!this.state.showVerifyButton && (this.state.newSearch || !this.state.contactPersonDoneStatus) &&
-          <button className="uikit-btn main-btn search-button" onClick={this.handleClientContactPersonSave}>Save</button>
+          <button className="uikit-btn main-btn search-button" onClick={this.handleClientContactPersonSave}>Continue</button>
         }
       </div>
     );
