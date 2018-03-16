@@ -52,6 +52,7 @@ class ContactPerson extends React.Component {
           personDetail: this.state.contactPerson.otherClientDetails.personDetails,
           foundContactFirstName: this.state.contactPerson.otherClientDetails.personDetails.firstName
         }))
+        this.props.contactPersonDone()
       }
       if(JSON.stringify(this.state.contactPerson.otherPersonDetails) !== "{}") {
         this.setState((prevState, props) => ({
@@ -66,6 +67,7 @@ class ContactPerson extends React.Component {
           contactMobile: this.state.contactPerson.otherPersonDetails.mobile,
           contactPersonAddress: this.state.contactPerson.otherPersonDetails.postalAddress
         }))
+        this.props.contactPersonDone()
       }
     }
   }
