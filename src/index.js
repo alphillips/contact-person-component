@@ -24,7 +24,7 @@ class ContactPerson extends React.Component {
     this.state = {
       contactPersonCode: "",
       searchTypeCode: "",
-      contactPerson: props.contactPerson,
+      contactPerson: props.contactPerson || undefined,
       clientEmail: "",
       searchEmailKeyword: "",
       foundClient: false,
@@ -34,7 +34,8 @@ class ContactPerson extends React.Component {
       showVerifyButton: false,
       foundClientDetail: {"firstName" : "Cindy"},
       contactPersonDone: true,
-      linkContactPerson:"LINK"
+      linkContactPerson:"LINK",
+      newSearch: true
     };
   }
 
