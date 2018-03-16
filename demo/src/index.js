@@ -51,9 +51,14 @@ class Demo extends Component {
       contactPersonDoneStatus: status
     }))
   }
+
+  handleClientContactPersonSave = () => {
+    console.log("handleClientContactPersonSave")
+  }
+
   render() {
     return (<div className="uikit-body">
-      <ContactPerson ref="contactPerson" contactPerson={contactPerson.contactPerson} standAlonePage={false} contactPersonDoneStatus={this.contactPersonDoneStatus.bind(status)} />
+      <ContactPerson ref="contactPerson" contactPerson={contactPerson.contactPerson} standAlonePage={false} handleClientContactPersonSave={this.handleClientContactPersonSave} contactPersonDoneStatus={this.contactPersonDoneStatus.bind(status)} />
 
       {this.state.contactPersonDoneStatus &&
         <button>some random button</button>

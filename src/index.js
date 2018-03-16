@@ -125,7 +125,7 @@ class ContactPerson extends React.Component {
     }
   }
 
-  handleClientContactPersonSave = () => {
+  handleClientContactPersonContinue = () => {
     this.setState((prevState, props) => ({
       newSearch: false,
       error: ""
@@ -149,6 +149,10 @@ class ContactPerson extends React.Component {
       }))
       this.props.contactPersonDoneStatus(true)
     }
+  }
+
+  handleClientContactPersonContinue = () => {
+    this.props.handleClientContactPersonSave()
   }
 
   updateSearchKeyword = () => {
@@ -348,7 +352,7 @@ class ContactPerson extends React.Component {
         )}
 
         {!this.state.showVerifyButton && (this.state.newSearch || !this.state.contactPersonDoneStatus) && !this.state.standAlonePage &&
-          <button className="uikit-btn uikit-btn--tertiary search-button" onClick={this.handleClientContactPersonSave}>Continue</button>
+          <button className="uikit-btn uikit-btn--tertiary search-button" onClick={this.handleClientContactPersonContinue}>Continue</button>
         }
         {!this.state.showVerifyButton &&  this.state.standAlonePage &&
           <button className="uikit-btn main-btn search-button" onClick={this.handleClientContactPersonSave}>Save</button>
