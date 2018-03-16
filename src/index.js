@@ -8,8 +8,7 @@ import EmailInput from '@react-ag-components/email-input'
 import Input from "@react-ag-components/input";
 import Address from "@react-ag-components/address";
 import SelectField from "material-ui/SelectField";
-import { Card, CardActions, CardHeader, CardText } from "material-ui/Card";
-import MenuItem from 'material-ui/MenuItem';
+import Messages from "@react-ag-components/messages";
 
 import "./contactperson.css";
 
@@ -83,22 +82,20 @@ class ContactPerson extends React.Component {
       searchEmailKeyword: "",
       foundClient: false,
       showManualClientEntry:false,
-      linkContactPerson: "",
       showVerifyButton: contactPersonCode === "OTHERCLIENT" ? true : false,
       newSearch: true,
       contactPersonDoneStatus: false
     }));
-    {this.props.markDirty !== undefined &&
-      this.props.markDirty("contactPersonCode", contactPersonCode)
-    }
     this.props.contactPersonDoneStatus(false)
   };
 
   linkContactPerson = (e) => {
     const linkContactPersonCode = e.target.value;
     this.setState((prevState, props) => ({
-      linkContactPerson: linkContactPersonCode
+      linkContactPerson: linkContactPersonCode,
+      contactPersonDoneStatus: false
     }))
+    this.props.contactPersonDoneStatus(false)
   }
 
   isValidEmail = (value) => {
@@ -129,10 +126,28 @@ class ContactPerson extends React.Component {
 
   handleClientContactPersonSave = () => {
     this.setState((prevState, props) => ({
-      contactPersonDoneStatus: true,
-      newSearch: false
+      newSearch: false,
+      error: ""
     }))
-    this.props.contactPersonDoneStatus(true)
+
+    if (this.state.linkContactPerson === "NOTLINK") {
+      if(this.state.contactFirstName === "" || this.state.contactLastName === "" || this.state.contactEmail === "") {
+        this.setState((prevState, props) => ({
+          error: "Please complete Contact Person details"
+        }))
+      } else {
+        this.setState((prevState, props) => ({
+          error: "",
+          contactPersonDoneStatus: true
+        }))
+        this.props.contactPersonDoneStatus(true)
+      }
+    } else {
+      this.setState((prevState, props) => ({
+        contactPersonDoneStatus: true
+      }))
+      this.props.contactPersonDoneStatus(true)
+    }
   }
 
   updateSearchKeyword = () => {
@@ -153,9 +168,6 @@ class ContactPerson extends React.Component {
       this.setState((prevState, props) => ({
         [field]: value
       }));
-      {this.props.markDirty !== undefined &&
-        this.props.markDirty(field, value)
-      }
     };
   };
 
@@ -194,6 +206,11 @@ class ContactPerson extends React.Component {
 
     return (
       <div className="contact-person-component">
+        <Messages
+          success={this.state.success}
+          error={this.state.error}
+          info={this.state.info}
+        />
         <h3>Contact Person</h3>
         {!window.IS_STAFF &&
           <MuiThemeProvider>
@@ -312,7 +329,7 @@ class ContactPerson extends React.Component {
               />
 
               <Input
-                label="Phone"
+                label="Phone (if known)"
                 id="contact-phone"
                 value={this.state.contactPhone}
                 onChange={this.onChange("contactPhone")}
@@ -321,7 +338,7 @@ class ContactPerson extends React.Component {
             </div>
 
             <Address
-              label="Postal address"
+              label="Postal address (if known)"
               value={this.state.contactPersonAddress}
               onChange={this.onChange("contactPersonAddress")}
             />
