@@ -29,7 +29,6 @@ class ContactPerson extends React.Component {
       searchEmailKeyword: "",
       foundClient: false,
       foundContactFirstName:"",
-      linkContactPerson: "",
       changedData: true,
       showVerifyButton: false,
       foundClientDetail: {"firstName" : "Cindy"},
