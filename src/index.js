@@ -259,7 +259,7 @@ class ContactPerson extends React.Component {
             </MuiThemeProvider>
 
             {this.state.showVerifyButton &&
-              <button className="uikit-btn main-btn search-button" onClick={this.triggerFindClientContactPerson}>Search for existing client</button>
+              <button className="uikit-btn uikit-btn--tertiary search-button" onClick={this.triggerFindClientContactPerson}>Search for existing client</button>
             }
 
               {this.state.foundClient &&
@@ -348,7 +348,7 @@ class ContactPerson extends React.Component {
         )}
 
         {!this.state.showVerifyButton && (this.state.newSearch || !this.state.contactPersonDoneStatus) && !this.state.standAlonePage &&
-          <button className="uikit-btn main-btn search-button" onClick={this.handleClientContactPersonSave}>Continue</button>
+          <button className="uikit-btn uikit-btn--tertiary search-button" onClick={this.handleClientContactPersonSave}>Continue</button>
         }
         {!this.state.showVerifyButton &&  this.state.standAlonePage &&
           <button className="uikit-btn main-btn search-button" onClick={this.handleClientContactPersonSave}>Save</button>
