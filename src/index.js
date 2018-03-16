@@ -128,7 +128,8 @@ class ContactPerson extends React.Component {
 
   handleClientContactPersonSave = () => {
     this.setState((prevState, props) => ({
-      contactPersonDoneStatus: true
+      contactPersonDoneStatus: true,
+      newSearch: false
     }))
     this.props.contactPersonDoneStatus(true)
   }
@@ -327,7 +328,7 @@ class ContactPerson extends React.Component {
         </MuiThemeProvider>
         )}
 
-        {!this.state.showVerifyButton && this.state.newSearch && this.state.contactPersonDoneStatus &&
+        {!this.state.showVerifyButton && (this.state.newSearch || !this.state.contactPersonDoneStatus) &&
           <button className="uikit-btn main-btn search-button" onClick={this.handleClientContactPersonSave}>Save</button>
         }
       </div>
