@@ -41,7 +41,7 @@ let contactPerson =
 let Demo = React.createClass({
   render() {
     return <div className="uikit-body">
-      <ContactPerson ref="contactPerson"  />
+      <ContactPerson ref="contactPerson"   />
 
     </div>
   }

@@ -311,9 +311,6 @@ class ContactPerson extends React.Component {
         </MuiThemeProvider>
         )}
 
-        {!this.state.showVerifyButton &&
-          <button className="uikit-btn main-btn search-button" onClick={this.triggerFindClientContactPerson}>Save</button>
-        }
       </div>
     );
   }
