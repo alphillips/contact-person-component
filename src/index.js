@@ -284,7 +284,7 @@ class ContactPerson extends React.Component {
                           }
                           <RadioButton
                             value="NOTLINK"
-                            label="Don't link to this account, enter details manually."
+                            label="Don't link to the existing client, enter details manually."
                             style={checkStyle}
                             labelStyle={checkLabelStyle}
                             name="radio-linkContactPerson"
