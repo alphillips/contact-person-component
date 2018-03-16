@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component} from 'react'
 import {render} from 'react-dom'
 
 import './uikit.css'
@@ -7,6 +7,7 @@ import './base.css'
 import ContactPerson from '../../src'
 
 // window.IS_STAFF = true
+
 let contactPerson =
 {
   "contactPerson": {
@@ -38,13 +39,28 @@ let contactPerson =
   }
 }
 
-let Demo = React.createClass({
-  render() {
-    return <div className="uikit-body">
-      <ContactPerson ref="contactPerson"   />
-
-    </div>
+class Demo extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      contactPersonDone: false
+    }
   }
-})
+  contactPersonDone = () => {
+    this.setState((prevState, props) => ({
+      contactPersonDone: true
+    }))
+  }
+  render() {
+    return (<div className="uikit-body">
+      <ContactPerson ref="contactPerson" contactPerson={contactPerson.contactPerson} contactPersonDone={this.contactPersonDone} />
+
+      {this.state.contactPersonDone &&
+        <button>some random button</button>
+      }
+
+    </div>)
+  }
+}
 
 render(<Demo/>, document.querySelector('#demo'))

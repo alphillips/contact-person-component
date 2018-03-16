@@ -119,6 +119,10 @@ class ContactPerson extends React.Component {
     }
   }
 
+  handleClientContactPersonSave = () => {
+    this.props.contactPersonDone()
+  }
+
   updateSearchKeyword = () => {
     return value => {
       this.setState((prevState, props) => ({
@@ -311,6 +315,9 @@ class ContactPerson extends React.Component {
         </MuiThemeProvider>
         )}
 
+        {!this.state.showVerifyButton &&
+          <button className="uikit-btn main-btn search-button" onClick={this.handleClientContactPersonSave}>Save</button>
+        }
       </div>
     );
   }
