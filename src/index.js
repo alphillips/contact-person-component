@@ -22,7 +22,7 @@ class ContactPerson extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      contactPersonCode: "",
+      contactPersonCode: "ME",
       searchTypeCode: "",
       contactPerson: props.contactPerson || undefined,
       clientEmail: "",

@@ -53,7 +53,7 @@ class Demo extends Component {
   }
   render() {
     return (<div className="uikit-body">
-      <ContactPerson ref="contactPerson" contactPerson={contactPerson.contactPerson} contactPersonDoneStatus={this.contactPersonDoneStatus.bind(status)} />
+      <ContactPerson ref="contactPerson" contactPersonDoneStatus={this.contactPersonDoneStatus.bind(status)} />
 
       {this.state.contactPersonDoneStatus &&
         <button>some random button</button>
