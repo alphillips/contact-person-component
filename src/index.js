@@ -32,7 +32,8 @@ class ContactPerson extends React.Component {
       linkContactPerson: "",
       changedData: true,
       showVerifyButton: false,
-      foundClientDetail: {"firstName" : "Cindy"}
+      foundClientDetail: {"firstName" : "Cindy"},
+      contactPersonDone: true
     };
   }
 
@@ -50,7 +51,8 @@ class ContactPerson extends React.Component {
           clientEmail: this.state.contactPerson.otherClientDetails.clientEmail,
           searchEmailKeyword: this.state.contactPerson.otherClientDetails.clientEmail,
           personDetail: this.state.contactPerson.otherClientDetails.personDetails,
-          foundContactFirstName: this.state.contactPerson.otherClientDetails.personDetails.firstName
+          foundContactFirstName: this.state.contactPerson.otherClientDetails.personDetails.firstName,
+          contactPersonDoneStatus: true
         }))
         this.props.contactPersonDoneStatus(true)
       }
@@ -65,7 +67,8 @@ class ContactPerson extends React.Component {
           searchEmailKeyword: this.state.contactPerson.otherPersonDetails.email,
           contactPhone: this.state.contactPerson.otherPersonDetails.phone,
           contactMobile: this.state.contactPerson.otherPersonDetails.mobile,
-          contactPersonAddress: this.state.contactPerson.otherPersonDetails.postalAddress
+          contactPersonAddress: this.state.contactPerson.otherPersonDetails.postalAddress,
+          contactPersonDoneStatus: true
         }))
         this.props.contactPersonDoneStatus(true)
       }
@@ -81,7 +84,8 @@ class ContactPerson extends React.Component {
       showManualClientEntry:false,
       linkContactPerson: "",
       showVerifyButton: contactPersonCode === "OTHERCLIENT" ? true : false,
-      newSearch: true
+      newSearch: true,
+      contactPersonDoneStatus: false
     }));
     {this.props.markDirty !== undefined &&
       this.props.markDirty("contactPersonCode", contactPersonCode)
@@ -123,6 +127,9 @@ class ContactPerson extends React.Component {
   }
 
   handleClientContactPersonSave = () => {
+    this.setState((prevState, props) => ({
+      contactPersonDoneStatus: true
+    }))
     this.props.contactPersonDoneStatus(true)
   }
 
@@ -132,7 +139,8 @@ class ContactPerson extends React.Component {
         searchEmailKeyword: value,
         foundClient: false,
         showVerifyButton: true,
-        newSearch: true
+        newSearch: true,
+        contactPersonDoneStatus: false
       }))
       this.props.contactPersonDoneStatus(false)
     }
@@ -319,7 +327,7 @@ class ContactPerson extends React.Component {
         </MuiThemeProvider>
         )}
 
-        {!this.state.showVerifyButton && this.state.newSearch &&
+        {!this.state.showVerifyButton && this.state.newSearch && this.state.contactPersonDoneStatus &&
           <button className="uikit-btn main-btn search-button" onClick={this.handleClientContactPersonSave}>Save</button>
         }
       </div>
