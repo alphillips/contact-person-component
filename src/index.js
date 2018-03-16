@@ -151,7 +151,7 @@ class ContactPerson extends React.Component {
     }
   }
 
-  handleClientContactPersonContinue = () => {
+  handleClientContactPersonSave = () => {
     this.props.handleClientContactPersonSave()
   }
 
