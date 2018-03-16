@@ -46,14 +46,14 @@ class Demo extends Component {
       contactPersonDone: false
     }
   }
-  contactPersonDone = () => {
+  contactPersonDoneStatus = () => {
     this.setState((prevState, props) => ({
       contactPersonDone: true
     }))
   }
   render() {
     return (<div className="uikit-body">
-      <ContactPerson ref="contactPerson" contactPerson={contactPerson.contactPerson} contactPersonDone={this.contactPersonDone} />
+      <ContactPerson ref="contactPerson" contactPerson={contactPerson.contactPerson} contactPersonDoneStatus={this.contactPersonDoneStatus.bind(status)} />
 
       {this.state.contactPersonDone &&
         <button>some random button</button>

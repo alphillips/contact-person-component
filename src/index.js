@@ -52,7 +52,7 @@ class ContactPerson extends React.Component {
           personDetail: this.state.contactPerson.otherClientDetails.personDetails,
           foundContactFirstName: this.state.contactPerson.otherClientDetails.personDetails.firstName
         }))
-        this.props.contactPersonDone()
+        this.props.contactPersonDoneStatus(true)
       }
       if(JSON.stringify(this.state.contactPerson.otherPersonDetails) !== "{}") {
         this.setState((prevState, props) => ({
@@ -67,7 +67,7 @@ class ContactPerson extends React.Component {
           contactMobile: this.state.contactPerson.otherPersonDetails.mobile,
           contactPersonAddress: this.state.contactPerson.otherPersonDetails.postalAddress
         }))
-        this.props.contactPersonDone()
+        this.props.contactPersonDoneStatus(true)
       }
     }
   }
@@ -86,6 +86,7 @@ class ContactPerson extends React.Component {
     {this.props.markDirty !== undefined &&
       this.props.markDirty("contactPersonCode", contactPersonCode)
     }
+    this.props.contactPersonDoneStatus(false)
   };
 
   linkContactPerson = (e) => {
@@ -113,16 +114,18 @@ class ContactPerson extends React.Component {
         foundClient: true,
         showManualClientEntry: false
       }))
+      this.props.contactPersonDoneStatus(true)
     } else {
       this.setState((prevState, props) => ({
         foundClient: false,
         showManualClientEntry: true
       }))
+      this.props.contactPersonDoneStatus(true)
     }
   }
 
   handleClientContactPersonSave = () => {
-    this.props.contactPersonDone()
+    this.props.contactPersonDoneStatus(true)
   }
 
   updateSearchKeyword = () => {
@@ -133,6 +136,7 @@ class ContactPerson extends React.Component {
         showVerifyButton: true,
         newSearch: true
       }))
+      this.props.contactPersonDoneStatus(false)
     }
   }
 
@@ -317,7 +321,7 @@ class ContactPerson extends React.Component {
         </MuiThemeProvider>
         )}
 
-        {!this.state.showVerifyButton &&
+        {!this.state.showVerifyButton && this.state.newSearch &&
           <button className="uikit-btn main-btn search-button" onClick={this.handleClientContactPersonSave}>Save</button>
         }
       </div>
