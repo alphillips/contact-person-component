@@ -114,13 +114,11 @@ class ContactPerson extends React.Component {
         foundClient: true,
         showManualClientEntry: false
       }))
-      this.props.contactPersonDoneStatus(true)
     } else {
       this.setState((prevState, props) => ({
         foundClient: false,
         showManualClientEntry: true
       }))
-      this.props.contactPersonDoneStatus(true)
     }
   }
 
