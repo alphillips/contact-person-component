@@ -33,7 +33,8 @@ class ContactPerson extends React.Component {
       foundClientDetail: {"firstName" : "Cindy"},
       contactPersonDone: true,
       linkContactPerson:"LINK",
-      newSearch: true
+      newSearch: true,
+      standAlonePage: props.standAlonePage || false
     };
   }
 
@@ -346,8 +347,11 @@ class ContactPerson extends React.Component {
         </MuiThemeProvider>
         )}
 
-        {!this.state.showVerifyButton && (this.state.newSearch || !this.state.contactPersonDoneStatus) &&
+        {!this.state.showVerifyButton && (this.state.newSearch || !this.state.contactPersonDoneStatus) && !this.state.standAlonePage &&
           <button className="uikit-btn main-btn search-button" onClick={this.handleClientContactPersonSave}>Continue</button>
+        }
+        {!this.state.showVerifyButton && (this.state.newSearch || !this.state.contactPersonDoneStatus) && this.state.standAlonePage &&
+          <button className="uikit-btn main-btn search-button" onClick={this.handleClientContactPersonSave}>Save</button>
         }
       </div>
     );
