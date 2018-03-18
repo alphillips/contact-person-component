@@ -182,7 +182,7 @@ class ContactPerson extends React.Component {
    person.contactPersonCode = this.state.contactPersonCode
     if (this.state.contactPersonCode === 'ME') {
       person.currentUserIsContactPerson = true
-      this.state.isDirty = (this.state.contactPersonCode !== this.state.contactPerson.contactPersonCode)
+      this.state.isDirty = (true !== this.state.contactPerson.currentUserIsContactPerson)
     } else {
       if(this.state.linkContactPerson === "LINK") {
         person.otherClientDetail.clientEmail = this.state.clientEmail
