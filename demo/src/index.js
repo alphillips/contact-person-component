@@ -27,7 +27,6 @@ let contactPerson =
       "lastName": "Pak",
       "email": "pak@agriculture.com",
       "phone": "234234",
-      "mobile": "234234",
       "postalAddress": {
         "addressLine1": "5 jason street",
         "suburb": "maroo",

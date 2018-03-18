@@ -67,7 +67,6 @@ class ContactPerson extends React.Component {
           contactEmail: this.state.contactPerson.otherPersonDetails.email,
           searchEmailKeyword: this.state.contactPerson.otherPersonDetails.email,
           contactPhone: this.state.contactPerson.otherPersonDetails.phone,
-          contactMobile: this.state.contactPerson.otherPersonDetails.mobile,
           contactPersonAddress: this.state.contactPerson.otherPersonDetails.postalAddress,
           contactPersonDoneStatus: true
         }))
@@ -182,13 +181,15 @@ class ContactPerson extends React.Component {
     if (this.state.contactPersonCode === 'ME') {
       person.currentUserIsContactPerson = true
     } else {
-      person.currentUserIsContactPerson = false
-      person.firstName = this.state.contactFirstName
-      person.lastName = this.state.contactLastName
-
-      person.email = this.state.contactEmail
-      person.phone = this.state.contactPhone
-      person.postalAddress = this.state.contactPersonAddress
+      if(this.state.linkContactPerson === "LINK") {
+        person.otherClientDetail.clientEmail = this.state.clientEmail
+      } else {
+        person.otherPersonDetails.firstName = this.state.contactFirstName,
+        person.otherPersonDetails.lastName = this.state.contactLastName,
+        person.otherPersonDetails.email = this.state.contactEmail,
+        person.otherPersonDetails.phone = this.state.contactPhone,
+        person.otherPersonDetails.postalAddress = this.state.contactPersonAddress
+      }
     }
     return person
   }
