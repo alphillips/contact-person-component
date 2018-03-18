@@ -34,8 +34,7 @@ class ContactPerson extends React.Component {
       contactPersonDone: true,
       linkContactPerson:"LINK",
       newSearch: true,
-      standAlonePage: props.standAlonePage || false,
-      isDirty: false
+      standAlonePage: props.standAlonePage || false
     };
   }
 
@@ -178,27 +177,23 @@ class ContactPerson extends React.Component {
 
   getDetails = () => {
    let person = {}
-   person.isDirty = this.state.isDirty
    person.contactPersonCode = this.state.contactPersonCode
     if (this.state.contactPersonCode === 'ME') {
       person.currentUserIsContactPerson = true
-      this.state.isDirty = (true !== this.state.contactPerson.currentUserIsContactPerson)
     } else {
       if(this.state.linkContactPerson === "LINK") {
         person.otherClientDetail.clientEmail = this.state.clientEmail
-        this.state.isDirty = (this.state.clientEmail !== this.state.contactPerson.otherClientDetail.clientEmail)
       } else {
         person.otherPersonDetails.firstName = this.state.contactFirstName,
         person.otherPersonDetails.lastName = this.state.contactLastName,
         person.otherPersonDetails.email = this.state.contactEmail,
         person.otherPersonDetails.phone = this.state.contactPhone,
         person.otherPersonDetails.postalAddress = this.state.contactPersonAddress
-
-        this.state.isDirty = (JSON.stringify(person.otherPersonDetails) !== JSON.stringify(this.state.contactPerson.otherPersonDetails))
       }
     }
     return person
   }
+
 
   render() {
     const checkStyle = {
