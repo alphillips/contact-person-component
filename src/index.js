@@ -22,62 +22,68 @@ class ContactPerson extends React.Component {
     super(props);
     this.state = {
       contactPersonCode: "ME",
-      searchTypeCode: "",
       contactPerson: props.contactPerson || undefined,
+      contactIsMe: props.contactPerson.currentUserIsContactPerson,
+      contactPersonIsLINK: JSON.stringify(props.contactPerson.otherClientDetails) !== "{}",
+      linkContactPersonCode:"LINK",
       clientEmail: "",
       searchEmailKeyword: "",
       foundClient: false,
       foundContactFirstName:"",
-      changedData: true,
       showVerifyButton: false,
       foundClientDetail: {"firstName" : "Cindy"},
       contactPersonDone: true,
-      linkContactPerson:"LINK",
       newSearch: true,
-      standAlonePage: props.standAlonePage || false
+      standAlonePage: props.standAlonePage || false,
+      isDirty: false
     };
   }
 
   componentWillMount = () => {
     if(this.state.contactPerson) {
       this.setState((prevState, props) => ({
-        contactPersonCode: (this.state.contactPerson.currentUserIsContactPerson === "false") ? "OTHERCLIENT" : "ME",
+        contactPersonCode: (!this.state.contactIsMe) ? "OTHERCLIENT" : "ME",
       }))
-      if(JSON.stringify(this.state.contactPerson.otherClientDetails) !== "{}") {
-        this.setState((prevState, props) => ({
-          linkContactPerson: "LINK",
-          foundClient: true,
-          newSearch: false,
-          clientId: this.state.contactPerson.otherClientDetails.clientId,
-          clientEmail: this.state.contactPerson.otherClientDetails.clientEmail,
-          searchEmailKeyword: this.state.contactPerson.otherClientDetails.clientEmail,
-          personDetail: this.state.contactPerson.otherClientDetails.personDetails,
-          foundContactFirstName: this.state.contactPerson.otherClientDetails.personDetails.firstName,
-          contactPersonDoneStatus: true
-        }))
-        this.props.contactPersonDoneStatus(true)
-      }
-      if(JSON.stringify(this.state.contactPerson.otherPersonDetails) !== "{}") {
-        this.setState((prevState, props) => ({
-          showManualClientEntry: true,
-          foundClient: false,
-          newSearch: false,
-          contactFirstName: this.state.contactPerson.otherPersonDetails.firstName,
-          contactLastName: this.state.contactPerson.otherPersonDetails.lastName,
-          contactEmail: this.state.contactPerson.otherPersonDetails.email,
-          clientEmail: this.state.contactPerson.otherPersonDetails.email,
-          searchEmailKeyword: this.state.contactPerson.otherPersonDetails.email,
-          contactPhone: this.state.contactPerson.otherPersonDetails.phone,
-          contactPersonAddress: this.state.contactPerson.otherPersonDetails.postalAddress,
-          contactPersonDoneStatus: true
-        }))
-        this.props.contactPersonDoneStatus(true)
+      if(!this.state.contactIsMe) {
+        if(this.state.contactPersonIsLINK) {
+          let contactPersonDoneStatus = true
+          this.setState((prevState, props) => ({
+            linkContactPersonCode: "LINK",
+            foundClient: true,
+            newSearch: false,
+            clientId: this.state.contactPerson.otherClientDetails.clientId,
+            clientEmail: this.state.contactPerson.otherClientDetails.clientEmail,
+            searchEmailKeyword: this.state.contactPerson.otherClientDetails.clientEmail,
+            personDetail: this.state.contactPerson.otherClientDetails.personDetails,
+            foundContactFirstName: this.state.contactPerson.otherClientDetails.personDetails.firstName,
+            contactPersonDoneStatus: contactPersonDoneStatus
+          }))
+          this.props.contactPersonDoneStatus(contactPersonDoneStatus)
+        }
+        if(!this.state.contactPersonIsLINK ) {
+          let contactPersonDoneStatus = true
+          this.setState((prevState, props) => ({
+            showManualClientEntry: true,
+            foundClient: false,
+            newSearch: false,
+            contactFirstName: this.state.contactPerson.otherPersonDetails.firstName,
+            contactLastName: this.state.contactPerson.otherPersonDetails.lastName,
+            contactEmail: this.state.contactPerson.otherPersonDetails.email,
+            clientEmail: this.state.contactPerson.otherPersonDetails.email,
+            searchEmailKeyword: this.state.contactPerson.otherPersonDetails.email,
+            contactPhone: this.state.contactPerson.otherPersonDetails.phone,
+            contactPersonAddress: this.state.contactPerson.otherPersonDetails.postalAddress,
+            contactPersonDoneStatus: contactPersonDoneStatus
+          }))
+          this.props.contactPersonDoneStatus(contactPersonDoneStatus)
+        }
       }
     }
   }
 
   setContactPersonCode = (event) => {
     const contactPersonCode = event.target.value;
+    let contactPersonDoneStatus = false
     this.setState((prevState, props) => ({
       contactPersonCode: contactPersonCode,
       searchEmailKeyword: "",
@@ -85,18 +91,19 @@ class ContactPerson extends React.Component {
       showManualClientEntry:false,
       showVerifyButton: contactPersonCode === "OTHERCLIENT" ? true : false,
       newSearch: true,
-      contactPersonDoneStatus: false
+      contactPersonDoneStatus: contactPersonDoneStatus
     }));
-    this.props.contactPersonDoneStatus(false)
+    this.props.contactPersonDoneStatus(contactPersonDoneStatus)
   };
 
   linkContactPerson = (e) => {
     const linkContactPersonCode = e.target.value;
+    let contactPersonDoneStatus = contactPersonDoneStatus
     this.setState((prevState, props) => ({
-      linkContactPerson: linkContactPersonCode,
+      linkContactPersonCode: linkContactPersonCode,
       contactPersonDoneStatus: false
     }))
-    this.props.contactPersonDoneStatus(false)
+    this.props.contactPersonDoneStatus(contactPersonDoneStatus)
   }
 
   isValidEmail = (value) => {
@@ -114,6 +121,7 @@ class ContactPerson extends React.Component {
         contactFirstName: this.state.foundClientDetail.firstName,
         foundContactFirstName: this.state.foundClientDetail.firstName,
         contactEmail: this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : "",
+        isDirty: this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword !== this.state.contactPerson : this.state.isDirty,
         foundClient: true,
         showManualClientEntry: false
       }))
@@ -137,17 +145,19 @@ class ContactPerson extends React.Component {
           error: "Please complete Contact Person details"
         }))
       } else {
+        let contactPersonDoneStatus = true
         this.setState((prevState, props) => ({
           error: "",
-          contactPersonDoneStatus: true
+          contactPersonDoneStatus: contactPersonDoneStatus
         }))
-        this.props.contactPersonDoneStatus(true)
+        this.props.contactPersonDoneStatus(contactPersonDoneStatus)
       }
     } else {
+      let contactPersonDoneStatus = true
       this.setState((prevState, props) => ({
-        contactPersonDoneStatus: true
+        contactPersonDoneStatus: contactPersonDoneStatus
       }))
-      this.props.contactPersonDoneStatus(true)
+      this.props.contactPersonDoneStatus(contactPersonDoneStatus)
     }
   }
 
@@ -157,14 +167,15 @@ class ContactPerson extends React.Component {
 
   updateSearchKeyword = () => {
     return value => {
+      let contactPersonDoneStatus = false
       this.setState((prevState, props) => ({
         searchEmailKeyword: value,
         foundClient: false,
         showVerifyButton: true,
         newSearch: true,
-        contactPersonDoneStatus: false
+        contactPersonDoneStatus: contactPersonDoneStatus
       }))
-      this.props.contactPersonDoneStatus(false)
+      this.props.contactPersonDoneStatus(contactPersonDoneStatus)
     }
   }
 
@@ -173,6 +184,12 @@ class ContactPerson extends React.Component {
       this.setState((prevState, props) => ({
         [field]: value
       }));
+      let oldValue = this.state.contactPerson[field];
+      if (oldValue !== value) {
+        this.setState((prevState, props) => ({
+          isDirty: true
+        }));
+      }
     };
   };
 
