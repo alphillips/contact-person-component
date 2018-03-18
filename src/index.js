@@ -65,6 +65,7 @@ class ContactPerson extends React.Component {
           contactFirstName: this.state.contactPerson.otherPersonDetails.firstName,
           contactLastName: this.state.contactPerson.otherPersonDetails.lastName,
           contactEmail: this.state.contactPerson.otherPersonDetails.email,
+          clientEmail: this.state.contactPerson.otherPersonDetails.email,
           searchEmailKeyword: this.state.contactPerson.otherPersonDetails.email,
           contactPhone: this.state.contactPerson.otherPersonDetails.phone,
           contactPersonAddress: this.state.contactPerson.otherPersonDetails.postalAddress,
