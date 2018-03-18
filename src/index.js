@@ -295,9 +295,9 @@ class ContactPerson extends React.Component {
                       <MuiThemeProvider>
                         <RadioButtonGroup
                           name="linkContactPersonMode"
-                          defaultSelected={this.state.linkContactPerson}
+                          defaultSelected={this.state.linkContactPersonCode}
                           onChange={this.linkContactPerson}
-                          valueSelected={this.state.linkContactPerson}
+                          valueSelected={this.state.linkContactPersonCode}
                         >
                           {!window.IS_STAFF &&
                             <RadioButton
