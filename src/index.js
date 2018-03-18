@@ -183,8 +183,10 @@ class ContactPerson extends React.Component {
       person.currentUserIsContactPerson = true
     } else {
       if(this.state.linkContactPerson === "LINK") {
+        person.otherClientDetail = {}
         person.otherClientDetail.clientEmail = this.state.clientEmail
       } else {
+        person.otherPersonDetails = {}
         person.otherPersonDetails.firstName = this.state.contactFirstName,
         person.otherPersonDetails.lastName = this.state.contactLastName,
         person.otherPersonDetails.email = this.state.contactEmail,
