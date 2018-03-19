@@ -24,7 +24,7 @@ class ContactPerson extends React.Component {
       contactPersonCode: "ME",
       contactPerson: props.contactPerson || undefined,
       contactIsMe: props.contactPerson && props.contactPerson.currentUserIsContactPerson,
-      contactPersonIsLINK: JSON.stringify(props.contactPerson.otherClientDetails) !== "{}",
+      contactPersonIsLINK: props.contactPerson && JSON.stringify(props.contactPerson.otherClientDetails) !== "{}",
       linkContactPersonCode:"LINK",
       clientEmail: "",
       searchEmailKeyword: "",
