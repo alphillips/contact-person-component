@@ -140,7 +140,7 @@ class ContactPerson extends React.Component {
     }))
 
     if (this.state.linkContactPersonCode === "NOTLINK") {
-      if(this.state.contactFirstName === "" || this.state.contactLastName === "" || (this.state.contactEmail === "" || !isValidEmail(this.state.contactEmail))) {
+      if(this.state.contactFirstName === "" || this.state.contactLastName === "" || (this.state.contactEmail === "" || !this.isValidEmail(this.state.contactEmail))) {
         this.setState((prevState, props) => ({
           error: "Please complete Contact Person details"
         }))
