@@ -35,7 +35,7 @@ class ContactPerson extends React.Component {
       contactPersonDone: true,
       newSearch: true,
       standAlonePage: props.standAlonePage || false,
-      isDirty: false
+      hasChanged: false
     };
   }
 
@@ -86,6 +86,7 @@ class ContactPerson extends React.Component {
     let contactPersonDoneStatus = false
     this.setState((prevState, props) => ({
       contactPersonCode: contactPersonCode,
+      contactIsMe: contactPersonCode === "ME" ? true : false,
       searchEmailKeyword: "",
       foundClient: false,
       showManualClientEntry:false,
@@ -121,7 +122,6 @@ class ContactPerson extends React.Component {
         contactFirstName: this.state.foundClientDetail.firstName,
         foundContactFirstName: this.state.foundClientDetail.firstName,
         contactEmail: this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : "",
-        isDirty: this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword !== this.state.contactPerson : this.state.isDirty,
         foundClient: true,
         showManualClientEntry: false
       }))
@@ -159,6 +159,8 @@ class ContactPerson extends React.Component {
       }))
       this.props.contactPersonDoneStatus(contactPersonDoneStatus)
     }
+
+    console.log(this.contactPersonHasChanged())
   }
 
   handleClientContactPersonSave = () => {
@@ -184,12 +186,6 @@ class ContactPerson extends React.Component {
       this.setState((prevState, props) => ({
         [field]: value
       }));
-      let oldValue = this.state.contactPerson[field];
-      if (oldValue !== value) {
-        this.setState((prevState, props) => ({
-          isDirty: true
-        }));
-      }
     };
   };
 
@@ -200,8 +196,8 @@ class ContactPerson extends React.Component {
       person.currentUserIsContactPerson = true
     } else {
       if(this.state.linkContactPersonCode === "LINK") {
-        person.otherClientDetail = {}
-        person.otherClientDetail.clientEmail = this.state.clientEmail
+        person.otherClientDetails = {}
+        person.otherClientDetails.clientEmail = this.state.clientEmail
       } else {
         person.otherPersonDetails = {}
         person.otherPersonDetails.firstName = this.state.contactFirstName,
@@ -215,7 +211,24 @@ class ContactPerson extends React.Component {
   }
 
   contactPersonHasChanged = () => {
-    return(this.state.isDirty)
+    let hasChanged = false
+
+    if (this.state.contactIsMe) {
+        hasChanged = (this.state.contactIsMe !== this.state.contactPerson.currentUserIsContactPerson)
+    } else {
+      if(this.state.linkContactPersonCode === "LINK") {
+        hasChanged = (this.state.clientEmail !== this.state.contactPerson.otherClientDetails.clientEmail)
+      } else {
+        hasChanged =
+          (this.state.contactFirstName !== this.state.contactPerson.otherPersonDetails.firstName) ||
+          (this.state.contactLastName !== this.state.contactPerson.otherPersonDetails.lastName) ||
+          (this.state.contactEmail !== this.state.contactPerson.otherPersonDetails.email) ||
+          (this.state.contactPhone !== this.state.contactPerson.otherPersonDetails.phone) ||
+          (this.state.contactPersonAddress !== this.state.contactPerson.otherPersonDetails.postalAddress)
+      }
+    }
+
+    return(hasChanged)
   }
 
   render() {
