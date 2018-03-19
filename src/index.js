@@ -23,7 +23,7 @@ class ContactPerson extends React.Component {
     this.state = {
       contactPersonCode: "ME",
       contactPerson: props.contactPerson || undefined,
-      contactIsMe: props.contactPerson.currentUserIsContactPerson,
+      contactIsMe: props.contactPerson && props.contactPerson.currentUserIsContactPerson,
       contactPersonIsLINK: JSON.stringify(props.contactPerson.otherClientDetails) !== "{}",
       linkContactPersonCode:"LINK",
       clientEmail: "",
@@ -159,8 +159,6 @@ class ContactPerson extends React.Component {
       }))
       this.props.contactPersonDoneStatus(contactPersonDoneStatus)
     }
-
-    console.log(this.contactPersonHasChanged())
   }
 
   handleClientContactPersonSave = () => {
