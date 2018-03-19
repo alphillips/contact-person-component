@@ -214,7 +214,7 @@ class ContactPerson extends React.Component {
     return person
   }
 
-  hasContactPersonChanged = () => {
+  contactPersonHasChanged = () => {
     return(this.state.isDirty)
   }
 
