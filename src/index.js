@@ -139,7 +139,7 @@ class ContactPerson extends React.Component {
       error: ""
     }))
 
-    if (this.state.linkContactPerson === "NOTLINK") {
+    if (this.state.linkContactPersonCode === "NOTLINK") {
       if(this.state.contactFirstName === "" || this.state.contactLastName === "" || (this.state.contactEmail === "" || !isValidEmail(this.state.contactEmail))) {
         this.setState((prevState, props) => ({
           error: "Please complete Contact Person details"
@@ -199,7 +199,7 @@ class ContactPerson extends React.Component {
     if (this.state.contactPersonCode === 'ME') {
       person.currentUserIsContactPerson = true
     } else {
-      if(this.state.linkContactPerson === "LINK") {
+      if(this.state.linkContactPersonCode === "LINK") {
         person.otherClientDetail = {}
         person.otherClientDetail.clientEmail = this.state.clientEmail
       } else {
@@ -324,7 +324,7 @@ class ContactPerson extends React.Component {
               }
           </div>
         )}
-        {(this.state.showManualClientEntry  || (this.state.linkContactPerson === "NOTLINK")) && (!this.state.showVerifyButton) &&(
+        {(this.state.showManualClientEntry  || (this.state.linkContactPersonCode === "NOTLINK")) && (!this.state.showVerifyButton) &&(
           <MuiThemeProvider>
           <div>
             {!this.state.foundClient &&
