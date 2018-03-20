@@ -121,9 +121,9 @@ class ContactPerson extends React.Component {
       let type
       let id
       if(this.isValidEmail(this.state.searchEmailKeyword)) {
-        type = clientEmail
+        type = "clientEmail"
       } else {
-        type = clientId
+        type = "clientId"
       }
       id = this.state.searchEmailKeyword
 
