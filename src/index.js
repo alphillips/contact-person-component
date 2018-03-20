@@ -128,17 +128,33 @@ class ContactPerson extends React.Component {
       }
       id = this.state.searchEmailKeyword
 
-      api.findClientEmailID(type, id).then(data => {
-          console.log(data)
-          this.setState({
-            foundClientDetail: data,
-            contactFirstName: data && data.firstName,
-            foundContactFirstName: data && data.firstName,
-            contactEmail: this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : "",
-            foundClient: data && data.firstName !== "" ,
-            showManualClientEntry: !(data && data.firstName !== "")
+      const URL_BASE = (process.env.API_HOST || '') + '/api/'
+
+      fetch(URL_BASE + 'v1/contactperson/type/' + type + "/id/" + id, { credentials: 'same-origin' }).then(
+
+      response => {
+        if (response.status === 200) {
+          response.text().then(data => {
+            let parsedData = JSON.parse(data)
+
+            if(parsedData.firstName !== "") {
+              this.setState((prevState, props) => ({
+                contactPersonDetail: parsedData,
+                contactFirstName: parsedData.firstName,
+                foundContactFirstName: parsedData.firstName,
+                contactEmail: this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : "",
+                foundClient: true,
+                showManualClientEntry: false
+              }))
+            } else {
+              this.setState((prevState, props) => ({
+                foundClient: false,
+                showManualClientEntry: true
+              }))
+            }
           })
-      });
+        }
+      })
     }
   }
 
