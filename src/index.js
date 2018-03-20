@@ -22,13 +22,13 @@ class ContactPerson extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      contactPersonCode: "ME",
+      contactPersonCode: props.contactPerson && props.contactPerson.currentUserIsContactPerson === "true" ? "ME" : "OTHERCLIENT",
       contactPerson: props.contactPerson || undefined,
-      contactIsMe: props.contactPerson && props.contactPerson.currentUserIsContactPerson,
+      contactIsMe: props.contactPerson && props.contactPerson.currentUserIsContactPerson === "true",
       contactPersonIsLINK: props.contactPerson && (props.contactPerson.otherClientDetails !== null),
       linkContactPersonCode:"LINK",
       contactEmail: "",
-      searchEmailKeyword: "",
+      searchEmailKeyword: props.contactPerson && props.contactPerson.email,
       foundClient: false,
       foundContactFirstName:"",
       showVerifyButton: false,
