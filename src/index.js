@@ -31,7 +31,7 @@ class ContactPerson extends React.Component {
       foundClient: false,
       foundContactFirstName:"",
       showVerifyButton: false,
-      foundClientDetail: {"firstName" : "Cindy"},
+      foundClientDetail: {},
       contactPersonDone: true,
       newSearch: true,
       standAlonePage: props.standAlonePage || false,
@@ -116,20 +116,34 @@ class ContactPerson extends React.Component {
       showVerifyButton: false,
       newSearch: true
     }))
-    if(JSON.stringify(this.state.foundClientDetail) !== "{}") {
-      // send to api
-      this.setState((prevState, props) => ({
-        contactFirstName: this.state.foundClientDetail.firstName,
-        foundContactFirstName: this.state.foundClientDetail.firstName,
-        contactEmail: this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : "",
-        foundClient: true,
-        showManualClientEntry: false
-      }))
-    } else {
-      this.setState((prevState, props) => ({
-        foundClient: false,
-        showManualClientEntry: true
-      }))
+
+    if(this.state.searchEmailKeyword !== "") {
+      let type
+      let id
+      if(this.isValidEmail(this.state.searchEmailKeyword)) {
+        type = clientEmail
+      } else {
+        type = clientId
+      }
+      id = this.state.searchEmailKeyword
+
+      api.findClientEmailID(type, id).then(data => {
+        if(data.firstName !== "") {
+          this.setState((prevState, props) => ({
+            foundClientDetail: data,
+            contactFirstName: data.firstName,
+            foundContactFirstName: data.firstName,
+            contactEmail: this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : "",
+            foundClient: true,
+            showManualClientEntry: false
+          }))
+        } else {
+          this.setState((prevState, props) => ({
+            foundClient: false,
+            showManualClientEntry: true
+          }))
+        }
+      });
     }
   }
 
