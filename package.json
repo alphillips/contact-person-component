@@ -23,13 +23,13 @@
   },
   "dependencies": {
     "@react-ag-components/address": "latest",
-    "@react-ag-components/core": "latest",
     "@react-ag-components/checkbox": "latest",
+    "@react-ag-components/core": "latest",
     "@react-ag-components/email-input": "latest",
-    "@react-ag-components/input": "latest",
+    "@react-ag-components/input": "^0.1.9",
+    "@react-ag-components/messages": "latest",
     "@react-ag-components/radiobutton": "latest",
     "@react-ag-components/reference-data-selector": "latest",
-    "@react-ag-components/messages": "latest",
     "npm-run-all": "^4.1.2",
     "react-google-autocomplete": "^1.0.13"
   },
@@ -37,7 +37,7 @@
     "react": "15.x"
   },
   "devDependencies": {
-    "node-sass": "^4.8.2",
+    "node-sass": "^4.8.3",
     "nwb": "0.15.x",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
