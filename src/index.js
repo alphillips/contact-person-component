@@ -127,8 +127,9 @@ class ContactPerson extends React.Component {
       id = this.state.searchEmailKeyword
 
       const URL_BASE = (process.env.API_HOST || '') + '/api/'
+      const URL_BODY = window.IS_STAFF ? 'v1/contactperson/staff/type/' : 'v1/contactperson/type/'
 
-      fetch(URL_BASE + 'v1/contactperson/type/' + type + "/id/" + id, { credentials: 'same-origin' }).then(
+      fetch(URL_BASE + URL_BODY + type + "/id/" + id, { credentials: 'same-origin' }).then(
 
       response => {
         if (response.status === 200) {
@@ -144,6 +145,13 @@ class ContactPerson extends React.Component {
                 foundClient: true,
                 showManualClientEntry: false
               }))
+              {!window.IS_STAFF &&
+                this.setState((prevState, props) => ({
+                  foundContactFirstName: parsedData.firstName,
+                  foundContactLastName: parsedData.lastName,
+                  foundContactPhone: parsedData.phone,
+                }))
+              }
             } else {
               this.setState((prevState, props) => ({
                 foundClient: false,
@@ -260,7 +268,6 @@ class ContactPerson extends React.Component {
           (this.state.contactPersonAddress !== this.state.contactPerson.otherPersonDetails.postalAddress)
       }
     }
-
     return(hasChanged)
   }
 

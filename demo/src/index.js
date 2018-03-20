@@ -18,8 +18,7 @@ let contactPerson =
       "personDetails": {
         "firstName": "Cindy"
         // "lastName": "Pak",
-        // "phone": "23574457",
-        // "mobile": "0436774457"
+        // "phone": "23574457"
       }
     },
     "otherPersonDetails": {
