@@ -43,7 +43,7 @@ class ContactPerson extends React.Component {
   componentWillMount = () => {
     if(this.state.contactPerson) {
       this.setState((prevState, props) => ({
-        contactPersonCode: (!this.state.contactIsMe) ? "OTHERCLIENT" : "ME",
+        contactPersonCode: (this.state.contactIsMe) ? "ME" : "OTHERCLIENT",
         searchEmailKeyword: this.state.contactPerson.email
       }))
       if(!this.state.contactIsMe) {
