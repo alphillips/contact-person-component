@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@react-ag-components/address": "latest",
+    "@react-ag-components/core": "latest",
     "@react-ag-components/checkbox": "latest",
     "@react-ag-components/email-input": "latest",
     "@react-ag-components/input": "latest",
