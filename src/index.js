@@ -53,8 +53,6 @@ class ContactPerson extends React.Component {
             linkContactPersonCode: "LINK",
             foundClient: true,
             newSearch: false,
-            clientId: this.state.contactPerson.otherClientDetails.clientId,
-            contactEmail: this.state.contactPerson.email,
             personDetail: this.state.contactPerson.otherClientDetails.personDetails,
             foundContactFirstName: this.state.contactPerson.otherClientDetails.personDetails.firstName,
             contactPersonDoneStatus: contactPersonDoneStatus
@@ -69,7 +67,6 @@ class ContactPerson extends React.Component {
             newSearch: false,
             contactFirstName: this.state.contactPerson.otherPersonDetails.firstName,
             contactLastName: this.state.contactPerson.otherPersonDetails.lastName,
-            contactEmail: this.state.contactPerson.email,
             contactPhone: this.state.contactPerson.otherPersonDetails.phone,
             contactPersonAddress: this.state.contactPerson.otherPersonDetails.postalAddress,
             contactPersonDoneStatus: contactPersonDoneStatus
@@ -136,11 +133,20 @@ class ContactPerson extends React.Component {
             let parsedData = JSON.parse(data)
 
             if(parsedData.firstName !== null) {
+
+              let contactEmail = this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : null
+              let contactId = null
+
+              if(contactEmail === null ){
+                contactId = this.state.searchEmailKeyword
+              }
+
               this.setState((prevState, props) => ({
                 contactPersonDetail: parsedData,
                 contactFirstName: parsedData.firstName,
                 foundContactFirstName: parsedData.firstName,
-                contactEmail: this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : "",
+                contactEmail: contactEmail,
+                contactId: contactId,
                 foundClient: true,
                 showManualClientEntry: false
               }))
