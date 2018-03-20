@@ -220,7 +220,7 @@ class ContactPerson extends React.Component {
    person.email = this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : null
    let searchID
 
-   if (person.email !== null) {
+   if (person.email === null) {
      searchID = this.state.searchEmailKeyword
    }
 
