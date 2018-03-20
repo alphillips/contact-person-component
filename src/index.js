@@ -44,6 +44,7 @@ class ContactPerson extends React.Component {
     if(this.state.contactPerson) {
       this.setState((prevState, props) => ({
         contactPersonCode: (!this.state.contactIsMe) ? "OTHERCLIENT" : "ME",
+        searchEmailKeyword: this.state.contactPerson.email
       }))
       if(!this.state.contactIsMe) {
         if(this.state.contactPersonIsLINK) {
@@ -54,7 +55,6 @@ class ContactPerson extends React.Component {
             newSearch: false,
             clientId: this.state.contactPerson.otherClientDetails.clientId,
             contactEmail: this.state.contactPerson.email,
-            searchEmailKeyword: this.state.contactPerson.email,
             personDetail: this.state.contactPerson.otherClientDetails.personDetails,
             foundContactFirstName: this.state.contactPerson.otherClientDetails.personDetails.firstName,
             contactPersonDoneStatus: contactPersonDoneStatus
@@ -70,7 +70,6 @@ class ContactPerson extends React.Component {
             contactFirstName: this.state.contactPerson.otherPersonDetails.firstName,
             contactLastName: this.state.contactPerson.otherPersonDetails.lastName,
             contactEmail: this.state.contactPerson.email,
-            searchEmailKeyword: this.state.contactPerson.otherPersonDetails.email,
             contactPhone: this.state.contactPerson.otherPersonDetails.phone,
             contactPersonAddress: this.state.contactPerson.otherPersonDetails.postalAddress,
             contactPersonDoneStatus: contactPersonDoneStatus
@@ -136,7 +135,7 @@ class ContactPerson extends React.Component {
           response.text().then(data => {
             let parsedData = JSON.parse(data)
 
-            if(parsedData.firstName !== "") {
+            if(parsedData.firstName !== null) {
               this.setState((prevState, props) => ({
                 contactPersonDetail: parsedData,
                 contactFirstName: parsedData.firstName,
@@ -216,22 +215,23 @@ class ContactPerson extends React.Component {
    person.otherClientDetails = null
    person.otherPersonDetails = null
    person.contactPersonCode = this.state.contactPersonCode
+   person.currentUserIsContactPerson = false
 
-   let searchEmail = this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : null
+   person.email = this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : null
    let searchID
 
-   if (searchEmail !== null) {
+   if (person.email !== null) {
      searchID = this.state.searchEmailKeyword
    }
 
     if (this.state.contactPersonCode === 'ME') {
       person.currentUserIsContactPerson = true
-      person.email = this.state.contactEmail
     } else {
       if(this.state.linkContactPersonCode === "LINK") {
         person.otherClientDetails = {}
-        person.otherClientDetails.clientEmail = searchEmail
         person.otherClientDetails.clientId = searchID
+        person.otherClientDetails.personDetails = {}
+        person.otherClientDetails.personDetails.firstName = this.state.foundContactFirstName
       } else {
         person.otherPersonDetails = {}
         person.otherPersonDetails.firstName = this.state.contactFirstName,
