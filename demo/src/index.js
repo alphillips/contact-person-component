@@ -12,20 +12,19 @@ let contactPerson =
 {
   "contactPerson": {
     "currentUserIsContactPerson": "false",
+    email: "",
     "otherClientDetails": {
-      // "clientId": "65465456",
-      // "clientEmail": "pak@agriculture.com",
-      // "personDetails": {
-      //   "firstName": "Cindy"
-      //   // "lastName": "Pak",
-      //   // "phone": "23574457",
-      //   // "mobile": "0436774457"
-      // }
+      "clientId": "65465456",
+      "personDetails": {
+        "firstName": "Cindy"
+        // "lastName": "Pak",
+        // "phone": "23574457",
+        // "mobile": "0436774457"
+      }
     },
     "otherPersonDetails": {
       "firstName": "Cindy",
       "lastName": "Pak",
-      "email": "pak@agriculture.com",
       "phone": "234234",
       "postalAddress": {
         "addressLine1": "5 jason street",

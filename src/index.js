@@ -25,9 +25,9 @@ class ContactPerson extends React.Component {
       contactPersonCode: "ME",
       contactPerson: props.contactPerson || undefined,
       contactIsMe: props.contactPerson && props.contactPerson.currentUserIsContactPerson,
-      contactPersonIsLINK: props.contactPerson && JSON.stringify(props.contactPerson.otherClientDetails) !== "{}",
+      contactPersonIsLINK: props.contactPerson && (props.contactPerson.otherClientDetails !== null),
       linkContactPersonCode:"LINK",
-      clientEmail: "",
+      contactEmail: "",
       searchEmailKeyword: "",
       foundClient: false,
       foundContactFirstName:"",
@@ -53,8 +53,8 @@ class ContactPerson extends React.Component {
             foundClient: true,
             newSearch: false,
             clientId: this.state.contactPerson.otherClientDetails.clientId,
-            clientEmail: this.state.contactPerson.otherClientDetails.clientEmail,
-            searchEmailKeyword: this.state.contactPerson.otherClientDetails.clientEmail,
+            contactEmail: this.state.contactPerson.email,
+            searchEmailKeyword: this.state.contactPerson.email,
             personDetail: this.state.contactPerson.otherClientDetails.personDetails,
             foundContactFirstName: this.state.contactPerson.otherClientDetails.personDetails.firstName,
             contactPersonDoneStatus: contactPersonDoneStatus
@@ -69,8 +69,7 @@ class ContactPerson extends React.Component {
             newSearch: false,
             contactFirstName: this.state.contactPerson.otherPersonDetails.firstName,
             contactLastName: this.state.contactPerson.otherPersonDetails.lastName,
-            contactEmail: this.state.contactPerson.otherPersonDetails.email,
-            clientEmail: this.state.contactPerson.otherPersonDetails.email,
+            contactEmail: this.state.contactPerson.email,
             searchEmailKeyword: this.state.contactPerson.otherPersonDetails.email,
             contactPhone: this.state.contactPerson.otherPersonDetails.phone,
             contactPersonAddress: this.state.contactPerson.otherPersonDetails.postalAddress,
@@ -122,7 +121,7 @@ class ContactPerson extends React.Component {
       let type
       let id
       if(this.isValidEmail(this.state.searchEmailKeyword)) {
-        type = "clientEmail"
+        type = "contactEmail"
       } else {
         type = "clientId"
       }
@@ -214,18 +213,29 @@ class ContactPerson extends React.Component {
 
   getDetails = () => {
    let person = {}
+   person.otherClientDetails = null
+   person.otherPersonDetails = null
    person.contactPersonCode = this.state.contactPersonCode
+
+   let searchEmail = this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : null
+   let searchID
+
+   if (searchEmail !== null) {
+     searchID = this.state.searchEmailKeyword
+   }
+
     if (this.state.contactPersonCode === 'ME') {
       person.currentUserIsContactPerson = true
+      person.email = this.state.contactEmail
     } else {
       if(this.state.linkContactPersonCode === "LINK") {
         person.otherClientDetails = {}
-        person.otherClientDetails.clientEmail = this.state.clientEmail
+        person.otherClientDetails.clientEmail = searchEmail
+        person.otherClientDetails.clientId = searchID
       } else {
         person.otherPersonDetails = {}
         person.otherPersonDetails.firstName = this.state.contactFirstName,
         person.otherPersonDetails.lastName = this.state.contactLastName,
-        person.otherPersonDetails.email = this.state.contactEmail,
         person.otherPersonDetails.phone = this.state.contactPhone,
         person.otherPersonDetails.postalAddress = this.state.contactPersonAddress
       }
@@ -240,12 +250,12 @@ class ContactPerson extends React.Component {
         hasChanged = (this.state.contactIsMe !== this.state.contactPerson.currentUserIsContactPerson)
     } else {
       if(this.state.linkContactPersonCode === "LINK") {
-        hasChanged = (this.state.clientEmail !== this.state.contactPerson.otherClientDetails.clientEmail)
+        hasChanged = (this.state.contactEmail !== this.state.contactPerson.email)
       } else {
         hasChanged =
           (this.state.contactFirstName !== this.state.contactPerson.otherPersonDetails.firstName) ||
           (this.state.contactLastName !== this.state.contactPerson.otherPersonDetails.lastName) ||
-          (this.state.contactEmail !== this.state.contactPerson.otherPersonDetails.email) ||
+          (this.state.contactEmail !== this.state.contactPerson.email) ||
           (this.state.contactPhone !== this.state.contactPerson.otherPersonDetails.phone) ||
           (this.state.contactPersonAddress !== this.state.contactPerson.otherPersonDetails.postalAddress)
       }
