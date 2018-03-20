@@ -128,7 +128,6 @@ class ContactPerson extends React.Component {
 
       const URL_BASE = (process.env.API_HOST || '') + '/api/'
       const URL_BODY = window.IS_STAFF ? 'v1/contactperson/staff/type/' : 'v1/contactperson/type/'
-
       fetch(URL_BASE + URL_BODY + type + "/id/" + id, { credentials: 'same-origin' }).then(
 
       response => {
