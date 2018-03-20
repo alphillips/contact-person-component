@@ -129,14 +129,15 @@ class ContactPerson extends React.Component {
       id = this.state.searchEmailKeyword
 
       api.findClientEmailID(type, id).then(data => {
-          this.setState((prevState, props) => ({
+          console.log(data)
+          this.setState({
             foundClientDetail: data,
             contactFirstName: data && data.firstName,
             foundContactFirstName: data && data.firstName,
             contactEmail: this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : "",
             foundClient: data && data.firstName !== "" ,
             showManualClientEntry: !(data && data.firstName !== "")
-          }))
+          })
       });
     }
   }
