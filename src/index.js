@@ -33,7 +33,6 @@ class ContactPerson extends React.Component {
       foundContactFirstName:"",
       showVerifyButton: false,
       foundClientDetail: {},
-      contactPersonDone: true,
       newSearch: true,
       standAlonePage: props.standAlonePage || false,
       hasChanged: false
@@ -78,10 +77,16 @@ class ContactPerson extends React.Component {
         }
       }
     }else {
+      let contactPersonDoneStatus = false
       this.setState((prevState, props) => ({
         contactPersonCode: "ME",
-        contacctIsMe: true
+        contactIsMe: true,
+        foundClient: false,
+        showVerifyButton: true,
+        newSearch: true,
+        contactPersonDoneStatus: contactPersonDoneStatus
       }))
+      this.props.contactPersonDoneStatus(contactPersonDoneStatus)
     }
   }
 
