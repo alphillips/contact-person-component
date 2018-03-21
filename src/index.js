@@ -79,6 +79,7 @@ class ContactPerson extends React.Component {
     this.setState((prevState, props) => ({
       contactPersonCode: contactPersonCode,
       contactIsMe: contactPersonCode === "ME" ? true : false,
+      linkContactPersonCode: contactPersonCode === "ME" ? "" : "LINK",
       searchEmailKeyword: "",
       foundClient: false,
       showManualClientEntry:false,
