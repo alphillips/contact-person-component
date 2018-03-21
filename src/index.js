@@ -22,7 +22,7 @@ class ContactPerson extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      contactPersonCode: props.contactPerson && props.contactPerson.currentUserIsContactPerson === "true" ? "ME" : "OTHERCLIENT",
+      contactPersonCode: "ME",
       contactPerson: props.contactPerson || undefined,
       contactIsMe: props.contactPerson && props.contactPerson.currentUserIsContactPerson === "true",
       contactPersonIsLINK: props.contactPerson && (props.contactPerson.otherClientDetails !== null),
@@ -42,7 +42,12 @@ class ContactPerson extends React.Component {
 
   componentWillMount = () => {
     if(this.state.contactPerson) {
-      if(!this.state.contactIsMe) {
+      if(this.state.contactIsMe) {
+        this.setState((prevState, props) => ({
+          contactPersonCode: "ME",
+          contacctIsMe: true
+        }))
+      } else {
         if(this.state.contactPersonIsLINK) {
           let contactPersonDoneStatus = true
           this.setState((prevState, props) => ({
@@ -70,6 +75,11 @@ class ContactPerson extends React.Component {
           this.props.contactPersonDoneStatus(contactPersonDoneStatus)
         }
       }
+    }else {
+      this.setState((prevState, props) => ({
+        contactPersonCode: "ME",
+        contacctIsMe: true
+      }))
     }
   }
 
