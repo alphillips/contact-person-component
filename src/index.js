@@ -261,12 +261,11 @@ class ContactPerson extends React.Component {
       if(this.state.linkContactPersonCode === "LINK") {
         hasChanged = (this.state.contactEmail !== this.state.contactPerson.email)
       } else {
-        hasChanged =
-          (this.state.contactFirstName !== this.state.contactPerson.otherPersonDetails.firstName) ||
+        hasChanged = ( (this.state.contactFirstName !== this.state.contactPerson.otherPersonDetails.firstName) ||
           (this.state.contactLastName !== this.state.contactPerson.otherPersonDetails.lastName) ||
           (this.state.contactEmail !== this.state.contactPerson.email) ||
           (this.state.contactPhone !== this.state.contactPerson.otherPersonDetails.phone) ||
-          (this.state.contactPersonAddress !== this.state.contactPerson.otherPersonDetails.postalAddress)
+          (this.state.contactPersonAddress !== this.state.contactPerson.otherPersonDetails.postalAddress) )
       }
     }
     return(hasChanged)
