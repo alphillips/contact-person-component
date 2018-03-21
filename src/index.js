@@ -26,7 +26,7 @@ class ContactPerson extends React.Component {
       contactPerson: props.contactPerson || undefined,
       contactIsMe: props.contactPerson && props.contactPerson.currentUserIsContactPerson === "true",
       contactPersonIsLINK: props.contactPerson && (props.contactPerson.otherClientDetails !== null),
-      linkContactPersonCode:"",
+      linkContactPersonCode:"LINK",
       contactEmail: props.contactPerson && props.contactPerson.email,
       searchEmailKeyword: props.contactPerson && props.contactPerson.email,
       foundClient: false,
@@ -131,7 +131,7 @@ class ContactPerson extends React.Component {
       id = this.state.searchEmailKeyword
 
       const URL_BASE = window.IS_STAFF ? '/partyas-rest/internal/api/v1/client/' : '/partyas-rest/external/api/v1/client/'
-       
+
       fetch(URL_BASE + type + "/" + id, { credentials: 'same-origin' }).then(
 
       response => {
@@ -182,7 +182,7 @@ class ContactPerson extends React.Component {
       error: ""
     }))
 
-    if (this.state.linkContactPersonCode === "NOTLINK") {
+    if (this.state.linkContactPersonCode && this.state.linkContactPersonCode === "NOTLINK") {
       if(this.state.contactFirstName === "" || this.state.contactLastName === "" || (this.state.contactEmail === "" || !this.isValidEmail(this.state.contactEmail))) {
         this.setState((prevState, props) => ({
           error: "Please complete Contact Person details"
@@ -369,15 +369,13 @@ class ContactPerson extends React.Component {
                           onChange={this.linkContactPerson}
                           valueSelected={this.state.linkContactPersonCode}
                         >
-                          {!window.IS_STAFF &&
-                            <RadioButton
-                              value="LINK"
-                              label={this.state.newSearch ? ("Use this existing client. '"  + this.state.foundContactFirstName  + "' as the contact person.") : (this.state.foundContactFirstName + " is the contact person.")}
-                              style={checkStyle}
-                              labelStyle={checkLabelStyle}
-                              name="radio-linkContactPerson"
-                            />
-                          }
+                          <RadioButton
+                            value="LINK"
+                            label={this.state.newSearch ? ("Use this existing client. '"  + this.state.foundContactFirstName  + "' as the contact person.") : (this.state.foundContactFirstName + " is the contact person.")}
+                            style={checkStyle}
+                            labelStyle={checkLabelStyle}
+                            name="radio-linkContactPerson"
+                          />
                           <RadioButton
                             value="NOTLINK"
                             label="Don't link to the existing client, enter details manually."
