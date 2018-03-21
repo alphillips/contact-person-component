@@ -54,10 +54,10 @@ class ContactPerson extends React.Component {
             contactPersonDoneStatus: contactPersonDoneStatus
           }))
           this.props.contactPersonDoneStatus(contactPersonDoneStatus)
-        }
-        if(!this.state.contactPersonIsLINK ) {
+        } else {
           let contactPersonDoneStatus = true
           this.setState((prevState, props) => ({
+            linkContactPersonCode: "NOTLINK",
             showManualClientEntry: true,
             foundClient: false,
             newSearch: false,
@@ -113,9 +113,9 @@ class ContactPerson extends React.Component {
       let type
       let id
       if(this.isValidEmail(this.state.searchEmailKeyword)) {
-        type = "contactEmail"
+        type = "email"
       } else {
-        type = "clientId"
+        type = "client-id"
       }
       id = this.state.searchEmailKeyword
 
