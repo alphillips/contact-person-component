@@ -17,8 +17,6 @@ let contactPerson =
       "clientId": "65465456",
       "personDetails": {
         "firstName": "Cindy"
-        // "lastName": "Pak",
-        // "phone": "23574457"
       }
     },
     "otherPersonDetails": {
@@ -30,7 +28,7 @@ let contactPerson =
         "suburb": "maroo",
         "state": "stateact",
         "postcode": "234234",
-        "country": "bestCountry"
+        "country": "au"
       }
     }
   }
