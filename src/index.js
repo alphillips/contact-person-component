@@ -22,7 +22,7 @@ class ContactPerson extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      contactPersonCode: "ME",
+      contactPersonCode: window.IS_STAFF ? "OTHERCLIENT" : "ME",
       contactPerson: props.contactPerson || undefined,
       contactIsMe: props.contactPerson && props.contactPerson.currentUserIsContactPerson === "true",
       contactPersonIsLINK: props.contactPerson && (props.contactPerson.otherClientDetails !== null),
