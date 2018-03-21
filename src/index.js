@@ -52,6 +52,7 @@ class ContactPerson extends React.Component {
           let contactPersonDoneStatus = true
           this.setState((prevState, props) => ({
             linkContactPersonCode: "LINK",
+            contactPersonCode: "OTHERCLIENT",
             foundClient: true,
             newSearch: false,
             personDetail: this.state.contactPerson.otherClientDetails.personDetails,
@@ -63,6 +64,7 @@ class ContactPerson extends React.Component {
           let contactPersonDoneStatus = true
           this.setState((prevState, props) => ({
             linkContactPersonCode: "NOTLINK",
+            contactPersonCode: "OTHERCLIENT",
             showManualClientEntry: true,
             foundClient: false,
             newSearch: false,
