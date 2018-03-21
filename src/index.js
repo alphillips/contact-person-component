@@ -27,7 +27,7 @@ class ContactPerson extends React.Component {
       contactIsMe: props.contactPerson && props.contactPerson.currentUserIsContactPerson === "true",
       contactPersonIsLINK: props.contactPerson && (props.contactPerson.otherClientDetails !== null),
       linkContactPersonCode:"LINK",
-      contactEmail: "",
+      contactEmail: props.contactPerson && props.contactPerson.email,
       searchEmailKeyword: props.contactPerson && props.contactPerson.email,
       foundClient: false,
       foundContactFirstName:"",
@@ -42,10 +42,6 @@ class ContactPerson extends React.Component {
 
   componentWillMount = () => {
     if(this.state.contactPerson) {
-      this.setState((prevState, props) => ({
-        contactPersonCode: (this.state.contactIsMe) ? "ME" : "OTHERCLIENT",
-        searchEmailKeyword: this.state.contactPerson.email
-      }))
       if(!this.state.contactIsMe) {
         if(this.state.contactPersonIsLINK) {
           let contactPersonDoneStatus = true
