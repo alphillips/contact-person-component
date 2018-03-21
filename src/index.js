@@ -82,7 +82,7 @@ class ContactPerson extends React.Component {
         contactPersonCode: "ME",
         contactIsMe: true,
         foundClient: false,
-        showVerifyButton: true,
+        showVerifyButton: window.IS_STAFF ? true : false,
         newSearch: true,
         contactPersonDoneStatus: contactPersonDoneStatus
       }))
