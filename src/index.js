@@ -28,9 +28,10 @@ class ContactPerson extends React.Component {
       contactPersonIsLINK: props.contactPerson && (props.contactPerson.otherClientDetails !== null),
       linkContactPersonCode:"LINK",
       contactEmail: props.contactPerson && props.contactPerson.email,
-      searchEmailKeyword: props.contactPerson && props.contactPerson.email,
+      searchEmailKeyword: props.contactPerson !== undefined ? props.contactPerson.email : null,
       foundClient: false,
       foundContactFirstName:"",
+      contactLastName: null,
       showVerifyButton: false,
       foundClientDetail: {},
       newSearch: true,
@@ -84,7 +85,9 @@ class ContactPerson extends React.Component {
         foundClient: false,
         showVerifyButton: window.IS_STAFF ? true : false,
         newSearch: true,
-        contactPersonDoneStatus: contactPersonDoneStatus
+        contactPersonDoneStatus: contactPersonDoneStatus,
+        searchEmailKeyword: null,
+        contactLastName: null
       }))
       this.props.contactPersonDoneStatus(contactPersonDoneStatus)
     }
@@ -97,7 +100,7 @@ class ContactPerson extends React.Component {
       contactPersonCode: contactPersonCode,
       contactIsMe: contactPersonCode === "ME" ? true : false,
       linkContactPersonCode: contactPersonCode === "ME" ? "" : "LINK",
-      searchEmailKeyword: "",
+      searchEmailKeyword: null,
       foundClient: false,
       showManualClientEntry:false,
       showVerifyButton: contactPersonCode === "OTHERCLIENT" ? true : false,
@@ -121,21 +124,28 @@ class ContactPerson extends React.Component {
     return (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value))
   }
 
-  triggerFindClientContactPerson = () => {
+  triggerFindClientContactPerson = (keyword) => {
     this.setState((prevState, props) => ({
       showVerifyButton: false,
       newSearch: true
     }))
 
-    if(this.state.searchEmailKeyword !== "") {
+    if(keyword !== null) {
       let type
       let id
-      if(this.isValidEmail(this.state.searchEmailKeyword)) {
+      if(this.isValidEmail(keyword)) {
         type = "email"
       } else {
         type = "client-id"
       }
-      id = this.state.searchEmailKeyword
+      id = keyword
+
+      let errObj = {}
+      errObj.type = "error"
+      errObj.msg = ""
+
+      this.props.contactPersonMsg(errObj)
+
 
       const URL_BASE = window.IS_STAFF ? '/partyas-rest/internal/api/v1/client/' : '/partyas-rest/external/api/v1/client/'
 
@@ -148,11 +158,11 @@ class ContactPerson extends React.Component {
 
             if(parsedData.firstName !== null) {
 
-              let contactEmail = this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : null
+              let contactEmail = this.isValidEmail(keyword) ? keyword : null
               let contactId = null
 
               if(contactEmail === null ){
-                contactId = this.state.searchEmailKeyword
+                contactId = keyword
               }
 
               this.setState((prevState, props) => ({
@@ -180,27 +190,50 @@ class ContactPerson extends React.Component {
           })
         }
       })
+    }else {
+      let errObj = {}
+      errObj.type = "error"
+      errObj.msg = "Please provide Contact person email or Client ID"
+
+      this.props.contactPersonMsg(errObj)
+
+      this.setState((prevState, props) => ({
+        showVerifyButton: true,
+        newSearch: true
+      }))
     }
   }
 
   handleClientContactPersonContinue = () => {
     this.setState((prevState, props) => ({
-      newSearch: false,
-      error: ""
+      newSearch: false
     }))
+    let errObj = {}
+    errObj.type = "error"
+    errObj.msg = ""
+
+    this.props.contactPersonMsg(errObj)
 
     if (this.state.linkContactPersonCode && this.state.linkContactPersonCode === "NOTLINK") {
-      if(this.state.contactFirstName === "" || this.state.contactLastName === "" || (this.state.contactEmail === "" || !this.isValidEmail(this.state.contactEmail))) {
-        this.setState((prevState, props) => ({
-          error: "Please complete Contact Person details"
-        }))
+      if(this.state.contactFirstName === "" || this.state.contactLastName === null || (this.state.contactEmail === "" || !this.isValidEmail(this.state.contactEmail))) {
+
+        let errObj = {}
+        errObj.type = "error"
+        errObj.msg = "Please complete Contact Person details"
+
+        this.props.contactPersonMsg(errObj)
       } else {
         let contactPersonDoneStatus = true
         this.setState((prevState, props) => ({
-          error: "",
           contactPersonDoneStatus: contactPersonDoneStatus
         }))
         this.props.contactPersonDoneStatus(contactPersonDoneStatus)
+
+        let errObj = {}
+        errObj.type = "error"
+        errObj.msg = ""
+
+        this.props.contactPersonMsg(errObj)
       }
     } else {
       let contactPersonDoneStatus = true
@@ -310,11 +343,6 @@ class ContactPerson extends React.Component {
 
     return (
       <div className="contact-person-component">
-        <Messages
-          success={this.state.success}
-          error={this.state.error}
-          info={this.state.info}
-        />
         <h3>Contact Person</h3>
         {!window.IS_STAFF &&
           <MuiThemeProvider>
@@ -362,7 +390,7 @@ class ContactPerson extends React.Component {
             </MuiThemeProvider>
 
             {this.state.showVerifyButton &&
-              <button className="uikit-btn uikit-btn--tertiary search-button" onClick={this.triggerFindClientContactPerson}>Search for existing client</button>
+              <button className="uikit-btn uikit-btn--tertiary search-button" onClick={this.triggerFindClientContactPerson.bind(this,this.state.searchEmailKeyword)}>Search for existing client</button>
             }
 
               {this.state.foundClient &&
