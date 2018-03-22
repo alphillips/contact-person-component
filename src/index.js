@@ -24,7 +24,7 @@ class ContactPerson extends React.Component {
     this.state = {
       contactPersonCode: window.IS_STAFF ? "OTHERCLIENT" : "ME",
       contactPerson: props.contactPerson || undefined,
-      contactIsMe: props.contactPerson && props.contactPerson.currentUserIsContactPerson === "true",
+      contactIsMe: props.contactPerson && props.contactPerson.currentUserIsContactPerson === true,
       contactPersonIsLINK: props.contactPerson && (props.contactPerson.otherClientDetails !== null),
       linkContactPersonCode:"LINK",
       contactEmail: props.contactPerson && props.contactPerson.email,
@@ -90,6 +90,12 @@ class ContactPerson extends React.Component {
         contactLastName: null
       }))
       this.props.contactPersonDoneStatus(contactPersonDoneStatus)
+      if (window.IS_STAFF) {
+        this.setState((prevState, props) => ({
+          contactPersonCode: "OTHERCLIENT",
+          contactIsMe: false
+        }))
+      }
     }
   }
 
@@ -156,7 +162,7 @@ class ContactPerson extends React.Component {
           response.text().then(data => {
             let parsedData = JSON.parse(data)
 
-            if(parsedData.firstName !== null) {
+            if(parsedData.firstName !== undefined ) {
 
               let contactEmail = this.isValidEmail(keyword) ? keyword : null
               let contactId = null
@@ -184,7 +190,10 @@ class ContactPerson extends React.Component {
             } else {
               this.setState((prevState, props) => ({
                 foundClient: false,
-                showManualClientEntry: true
+                showManualClientEntry: true,
+                contactPersonCode: "OTHERCLIENT",
+                contactIsMe: false,
+                linkContactPersonCode:"NOTLINK"
               }))
             }
           })
@@ -463,7 +472,6 @@ class ContactPerson extends React.Component {
                 id="contact-phone"
                 value={this.state.contactPhone}
                 onChange={this.onChange("contactPhone")}
-                required={true}
               />
             </div>
 
