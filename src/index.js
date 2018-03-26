@@ -45,7 +45,7 @@ class ContactPerson extends React.Component {
       if(this.state.contactIsMe) {
         this.setState((prevState, props) => ({
           contactPersonCode: "ME",
-          contacctIsMe: true
+          contactIsMe: true
         }))
       } else {
         if(this.state.contactPersonIsLINK) {
@@ -324,7 +324,7 @@ class ContactPerson extends React.Component {
       if(this.state.linkContactPersonCode === "LINK") {
         hasChanged = (this.state.contactEmail !== this.state.contactPerson.email)
       } else {
-        hasChanged = ( (this.state.contactFirstName !== this.state.contactPerson.otherPersonDetails.firstName) ||
+        hasChanged = (this.state.contactPerson.otherPersonDetails !== null ? (this.state.contactFirstName !== this.state.contactPerson.otherPersonDetails.firstName) : true ||
           (this.state.contactLastName !== this.state.contactPerson.otherPersonDetails.lastName) ||
           (this.state.contactEmail !== this.state.contactPerson.email) ||
           (this.state.contactPhone !== this.state.contactPerson.otherPersonDetails.phone) ||
