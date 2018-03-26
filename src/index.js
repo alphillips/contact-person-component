@@ -289,11 +289,17 @@ class ContactPerson extends React.Component {
    person.contactPersonCode = this.state.contactPersonCode
    person.currentUserIsContactPerson = false
 
-   person.email = this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : null
    let searchID
 
-   if (person.email === null) {
-     searchID = this.state.searchEmailKeyword
+   if(this.state.foundClient){
+     person.email = this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : null
+
+     if (person.email === null) {
+       searchID = this.state.searchEmailKeyword
+     }
+   } else {
+      person.email = this.state.contactEmail
+      searchID = null
    }
 
     if (this.state.contactPersonCode === 'ME') {
