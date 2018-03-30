@@ -36,7 +36,8 @@ class ContactPerson extends React.Component {
       newSearch: true,
       standAlonePage: props.standAlonePage || false,
       standAloneLabel: props.standAloneLabel || "Save",
-      hasChanged: false
+      hasChanged: false,
+      showHeading: props.hasHeading || true
     };
   }
 
@@ -406,7 +407,9 @@ class ContactPerson extends React.Component {
             {!this.state.foundClient &&
               <p className="info-text">{this.state.newSearch && "There is no client match. "} Update email address or client id to change contact person.</p>
             }
+            {this.state.showHeading &&
             <h3>Detail of Contact Person</h3>
+            }
             <div className="half-area">
               <Input
                 label="First name"
