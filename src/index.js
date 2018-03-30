@@ -317,7 +317,9 @@ class ContactPerson extends React.Component {
           error={this.state.error}
           info={this.state.info}
         />
-        <h3>Contact Person</h3>
+        {this.state.showHeading &&
+          <h3>Contact Person</h3>
+        }
         {!window.IS_STAFF &&
           <MuiThemeProvider>
 
@@ -407,9 +409,8 @@ class ContactPerson extends React.Component {
             {!this.state.foundClient &&
               <p className="info-text">{this.state.newSearch && "There is no client match. "} Update email address or client id to change contact person.</p>
             }
-            {this.state.showHeading &&
             <h3>Detail of Contact Person</h3>
-            }
+
             <div className="half-area">
               <Input
                 label="First name"
