@@ -53,7 +53,13 @@ class Demo extends Component {
 
   render() {
     return (<div className="uikit-body">
-      <ContactPerson ref="contactPerson" contactPerson={contactPerson.contactPerson} standAlonePage={false} handleClientContactPersonSave={this.handleClientContactPersonSave} contactPersonDoneStatus={this.contactPersonDoneStatus.bind(status)} />
+      <ContactPerson ref="contactPerson"
+      contactPerson={contactPerson.contactPerson}
+      standAlonePage={false}
+      handleClientContactPersonSave={this.handleClientContactPersonSave}
+      contactPersonDoneStatus={this.contactPersonDoneStatus.bind(status)}
+      notShowHeading={true}
+      />
 
       {this.state.contactPersonDoneStatus &&
         <button>some random button</button>

@@ -37,7 +37,7 @@ class ContactPerson extends React.Component {
       standAlonePage: props.standAlonePage || false,
       standAloneLabel: props.standAloneLabel || "Save",
       hasChanged: false,
-      showHeading: props.showHeading || true
+      notShowHeading: props.notShowHeading || false
     };
   }
 
@@ -317,7 +317,7 @@ class ContactPerson extends React.Component {
           error={this.state.error}
           info={this.state.info}
         />
-        {this.state.showHeading &&
+        {!this.state.notShowHeading &&
           <h3>Contact Person</h3>
         }
         {!window.IS_STAFF &&
