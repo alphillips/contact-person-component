@@ -35,6 +35,7 @@ class ContactPerson extends React.Component {
       foundClientDetail: {},
       newSearch: true,
       standAlonePage: props.standAlonePage || false,
+      standAloneLabel: props.standAloneLabel || "Save",
       hasChanged: false
     };
   }
@@ -452,7 +453,7 @@ class ContactPerson extends React.Component {
           <button className="uikit-btn uikit-btn--tertiary search-button" onClick={this.handleClientContactPersonContinue}>Continue</button>
         }
         {!this.state.showVerifyButton &&  this.state.standAlonePage &&
-          <button className="uikit-btn main-btn search-button" onClick={this.handleClientContactPersonSave}>Save</button>
+          <button className="uikit-btn main-btn search-button" onClick={this.handleClientContactPersonSave}>{this.state.standAloneLabel}</button>
         }
       </div>
     );
