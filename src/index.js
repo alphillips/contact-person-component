@@ -37,7 +37,7 @@ class ContactPerson extends React.Component {
       standAlonePage: props.standAlonePage || false,
       standAloneLabel: props.standAloneLabel || "Save",
       hasChanged: false,
-      showHeading: props.hasHeading || true
+      showHeading: props.showHeading || true
     };
   }
 
