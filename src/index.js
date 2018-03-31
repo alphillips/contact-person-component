@@ -226,7 +226,7 @@ class ContactPerson extends React.Component {
     this.props.contactPersonMsg(errObj)
 
     if (this.state.linkContactPersonCode && this.state.linkContactPersonCode === "NOTLINK") {
-      if(this.state.contactFirstName === "" || this.state.contactLastName === null || (this.state.contactEmail === "" || !this.isValidEmail(this.state.contactEmail))) {
+      if(this.state.contactFirstName === "" ||this.state.contactFirstName === null || this.state.contactLastName === null || this.state.contactLastName === "" || (this.state.contactEmail === "" || this.state.contactEmail === null || !this.isValidEmail(this.state.contactEmail))) {
 
         let errObj = {}
         errObj.type = "error"
