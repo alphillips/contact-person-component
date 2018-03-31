@@ -12,11 +12,11 @@ let contactPerson =
 {
   "contactPerson": {
     "currentUserIsContactPerson": "false",
-    email: "",
+    "email": "email@email.com",
     "otherClientDetails": {
       "clientId": "65465456",
       "personDetails": {
-        "firstName": "Cindy"
+        "firstName": "John"
       }
     },
     "otherPersonDetails": {

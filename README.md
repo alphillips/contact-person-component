@@ -14,7 +14,36 @@ import ContactPerson from '@react-ag-components/contact-person'
 ```
 
 ```
-<ContactPerson />
+let contactPerson =
+{
+  "contactPerson": {
+    "currentUserIsContactPerson": "false",
+    "email": "email@email.com",
+    "otherClientDetails": {
+      "clientId": "65465456",
+      "personDetails": {
+        "firstName": "John"
+      }
+    },
+    "otherPersonDetails": {
+      "firstName": "Cindy",
+      "lastName": "Pak",
+      "phone": "234234",
+      "postalAddress": {
+        "addressLine1": "5 jason street",
+        "suburb": "maroo",
+        "state": "stateact",
+        "postcode": "234234",
+        "country": "au"
+      }
+    }
+  }
+}
+```
+
+```
+<ContactPerson ref="contactPerson" contactPerson={contactPerson.contactPerson} standAlonePage={false} handleClientContactPersonSave={this.handleClientContactPersonSave} contactPersonDoneStatus={this.contactPersonDoneStatus.bind(status)} />
+
 ```
 
 ### Properties
@@ -22,7 +51,9 @@ import ContactPerson from '@react-ag-components/contact-person'
 | prop        | Type           | Note  |
 | ------------- |:-------------:| -----:|
 | contactPerson      | object | data.contactPerson |
-| markDirty     | function      |   <ul><li>... |
+| standAlonePage     | boolean      |   Has own Save button |
+| handleClientContactPersonSave     | function      |   perform save |
+| contactPersonDoneStatus     | function      |   broadcast done, usually use to show the rest of the fields on the page |
 
 
 ## Contributing
