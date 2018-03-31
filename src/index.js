@@ -255,10 +255,6 @@ class ContactPerson extends React.Component {
     }
   }
 
-  handleClientContactPersonSave = () => {
-    this.props.handleClientContactPersonSave()
-  }
-
   updateSearchKeyword = () => {
     return value => {
       let contactPersonDoneStatus = false
@@ -504,7 +500,7 @@ class ContactPerson extends React.Component {
           <button className="uikit-btn uikit-btn--tertiary search-button" onClick={this.handleClientContactPersonContinue}>Continue</button>
         }
         {!this.state.showVerifyButton &&  this.state.standAlonePage &&
-          <button className="uikit-btn main-btn search-button" onClick={this.handleClientContactPersonSave}>{this.state.standAloneLabel}</button>
+          <button className="uikit-btn main-btn search-button" onClick={this.handleClientContactPersonContinue}>{this.state.standAloneLabel}</button>
         }
       </div>
     );
