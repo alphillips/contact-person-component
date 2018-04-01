@@ -54,6 +54,9 @@ let contactPerson =
 | standAlonePage     | boolean      |   Has own Save button |
 | handleClientContactPersonSave     | function      |   perform save |
 | contactPersonDoneStatus     | function      |   broadcast done, usually use to show the rest of the fields on the page |
+| standAloneLabel     | string      |   default is "Save" |
+| getErrorObj()     | function      |   let error = this.refs.contactPerson.getErrorObj(), error.type and error.msg available |
+
 
 
 ## Contributing
