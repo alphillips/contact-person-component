@@ -256,7 +256,7 @@ class ContactPerson extends React.Component {
 
     if(this.state.standAlonePage){
       if(errObj.msg === "") {
-        this.handleClientContactPersonSave()
+        this.props.handleClientContactPersonSave()
       }
     }
   }
