@@ -40,6 +40,7 @@ class ContactPerson extends React.Component {
       hasChanged: false,
       notShowHeading: props.notShowHeading || false
     };
+    this.errObj = {}
   }
 
   componentWillMount = () => {
@@ -148,11 +149,11 @@ class ContactPerson extends React.Component {
       }
       id = keyword
 
-      let errObj = {}
-      errObj.type = "error"
-      errObj.msg = ""
+      this.errObj = {}
+      this.errObj.type = "error"
+      this.errObj.msg = ""
 
-      this.props.contactPersonMsg(errObj)
+      this.props.contactPersonMsg(this.errObj)
 
 
       const URL_BASE = window.IS_STAFF ? '/partyas-rest/internal/api/v1/client/' : '/partyas-rest/external/api/v1/client/'
@@ -202,11 +203,11 @@ class ContactPerson extends React.Component {
         }
       })
     }else {
-      let errObj = {}
-      errObj.type = "error"
-      errObj.msg = "Please provide Contact person email or Client ID"
+      this.errObj = {}
+      this.errObj.type = "error"
+      this.errObj.msg = "Please provide Contact person email or Client ID"
 
-      this.props.contactPersonMsg(errObj)
+      this.props.contactPersonMsg(this.errObj)
 
       this.setState((prevState, props) => ({
         showVerifyButton: true,
@@ -219,20 +220,20 @@ class ContactPerson extends React.Component {
     this.setState((prevState, props) => ({
       newSearch: false
     }))
-    let errObj = {}
-    errObj.type = "error"
-    errObj.msg = ""
+    this.errObj = {}
+    this.errObj.type = "error"
+    this.errObj.msg = ""
 
-    this.props.contactPersonMsg(errObj)
+    this.props.contactPersonMsg(this.errObj)
 
     if (this.state.linkContactPersonCode && this.state.linkContactPersonCode === "NOTLINK") {
       if(this.state.contactFirstName === "" ||this.state.contactFirstName === null || this.state.contactLastName === null || this.state.contactLastName === "" || (this.state.contactEmail === "" || this.state.contactEmail === null || !this.isValidEmail(this.state.contactEmail))) {
 
-        let errObj = {}
-        errObj.type = "error"
-        errObj.msg = "Please complete Contact Person details"
+        this.errObj = {}
+        this.errObj.type = "error"
+        this.errObj.msg = "Please complete Contact Person details"
 
-        this.props.contactPersonMsg(errObj)
+        this.props.contactPersonMsg(this.errObj)
       } else {
         let contactPersonDoneStatus = true
         this.setState((prevState, props) => ({
@@ -240,11 +241,11 @@ class ContactPerson extends React.Component {
         }))
         this.props.contactPersonDoneStatus(contactPersonDoneStatus)
 
-        let errObj = {}
-        errObj.type = "error"
-        errObj.msg = ""
+        this.errObj = {}
+        this.errObj.type = "error"
+        this.errObj.msg = ""
 
-        this.props.contactPersonMsg(errObj)
+        this.props.contactPersonMsg(this.errObj)
       }
     } else {
       let contactPersonDoneStatus = true
@@ -255,12 +256,11 @@ class ContactPerson extends React.Component {
     }
 
     if(this.state.standAlonePage){
-      if(errObj.msg === "") {
+      if(this.errObj.msg === "") {
         this.props.handleClientContactPersonSave()
       }
     }
   }
-
 
   updateSearchKeyword = () => {
     return value => {
@@ -286,6 +286,10 @@ class ContactPerson extends React.Component {
       this.props.contactPersonDoneStatus(contactPersonDoneStatus)
     };
   };
+
+  getErrorObj = () => {
+    return this.errObj
+  }
 
   getDetails = () => {
    let person = {}
