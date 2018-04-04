@@ -11,6 +11,13 @@ $darken-text: darken(whitesmoke, 30%);
       width: 20%!important;
     }
   }
+  .half-area {
+    & > div {
+      width: 45%;
+      margin-right: 5.0%;
+      display: inline-block!important;
+    }
+  }
   .custom-width-button {
     display: inline-block;
     button {

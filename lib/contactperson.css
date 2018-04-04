@@ -6,6 +6,10 @@
     margin-right: 20px; }
     .contact-person-component .custom-width.search {
       width: 20% !important; }
+  .contact-person-component .half-area > div {
+    width: 45%;
+    margin-right: 5.0%;
+    display: inline-block !important; }
   .contact-person-component .custom-width-button {
     display: inline-block; }
     .contact-person-component .custom-width-button button {
