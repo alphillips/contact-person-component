@@ -295,7 +295,6 @@ class ContactPerson extends React.Component {
    let person = {}
    person.otherClientDetails = null
    person.otherPersonDetails = null
-   person.contactPersonCode = this.state.contactPersonCode
    person.currentUserIsContactPerson = false
 
    let searchID
