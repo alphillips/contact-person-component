@@ -165,7 +165,7 @@ class ContactPerson extends React.Component {
           response.text().then(data => {
             let parsedData = JSON.parse(data)
 
-            if(parsedData.firstName !== undefined ) {
+            if(parsedData.firstName !== null ) {
 
               let contactEmail = this.isValidEmail(keyword) ? keyword : null
               let contactId = null
