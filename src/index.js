@@ -162,6 +162,7 @@ class ContactPerson extends React.Component {
 
       response => {
         if (response.status === 200) {
+
           response.text().then(data => {
             let parsedData = JSON.parse(data)
 
@@ -200,6 +201,17 @@ class ContactPerson extends React.Component {
               }))
             }
           })
+        } else {
+          this.errObj = {}
+          this.errObj.type = "error"
+          this.errObj.msg = "There was an error with the server"
+
+          this.props.contactPersonMsg(this.errObj)
+
+          this.setState((prevState, props) => ({
+            showVerifyButton: true,
+            newSearch: true
+          }))
         }
       })
     }else {
@@ -412,7 +424,7 @@ class ContactPerson extends React.Component {
                 label={"Contact Person Email or Client ID"}
                 id="search"
                 value={this.state.searchEmailKeyword}
-                onChange={this.updateSearchKeyword()}
+                onChange={this.updateSearchKeyword}
                 placeholder={
                   "Client Email"
                 }

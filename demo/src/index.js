@@ -48,7 +48,6 @@ class Demo extends Component {
   }
 
   handleClientContactPersonSave = () => {
-    console.log("handleClientContactPersonSave")
   }
 
   render() {

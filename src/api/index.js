@@ -1,7 +1,10 @@
-const URL_BASE = (process.env.API_HOST || '') 
+const URL_BASE = (process.env.API_HOST || '')
 
 import {get, post, put, del, formPost} from '@react-ag-components/core/lib/api'
 
-export function findClientEmailID(type, id) {
-   return get(URL_BASE + '/v1/contactperson/type/' + type + "/id/" + id)
-}
+// app.get('/internal/api/v1/client/:type/:id', function (req, res) {
+//     res.json(firstNameFound)
+//   })
+//   app.get('/external/api/v1/client/:type/:id', function (req, res) {
+//     res.json(firstNameFound)
+//   })
