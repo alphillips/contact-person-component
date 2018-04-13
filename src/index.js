@@ -161,7 +161,7 @@ class ContactPerson extends React.Component {
       fetch(URL_BASE + type + "/" + id, { credentials: 'same-origin' }).then(
 
       response => {
-        if (response.status === 200) {
+        if (response.status !== 200) {
 
           response.text().then(data => {
             let parsedData = JSON.parse(data)
@@ -424,7 +424,7 @@ class ContactPerson extends React.Component {
                 label={"Contact Person Email or Client ID"}
                 id="search"
                 value={this.state.searchEmailKeyword}
-                onChange={this.updateSearchKeyword}
+                onChange={this.updateSearchKeyword()}
                 placeholder={
                   "Client Email"
                 }
