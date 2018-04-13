@@ -161,7 +161,7 @@ class ContactPerson extends React.Component {
       fetch(URL_BASE + type + "/" + id, { credentials: 'same-origin' }).then(
 
       response => {
-        if (response.status !== 200) {
+        if (response.status === 200) {
 
           response.text().then(data => {
             let parsedData = JSON.parse(data)
