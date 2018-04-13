@@ -278,6 +278,7 @@ class ContactPerson extends React.Component {
     return value => {
       let contactPersonDoneStatus = false
       this.setState((prevState, props) => ({
+        error: "",
         searchEmailKeyword: value,
         foundClient: false,
         showVerifyButton: true,
