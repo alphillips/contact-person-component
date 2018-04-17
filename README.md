@@ -42,7 +42,14 @@ let contactPerson =
 ```
 
 ```
-<ContactPerson ref="contactPerson" contactPerson={contactPerson.contactPerson} standAlonePage={false} handleClientContactPersonSave={this.handleClientContactPersonSave} contactPersonDoneStatus={this.contactPersonDoneStatus.bind(status)} />
+<ContactPerson
+  ref="contactPerson"
+  contactPersonDoneStatus={this.contactPersonDoneStatus.bind(status)}
+  contactPersonMsg={this.updateMsg.bind(status)}
+  standAlonePage={false}
+  notShowHeading={false}
+  contactPerson={this.state.contactPerson}
+/>
 
 ```
 
@@ -50,12 +57,14 @@ let contactPerson =
 
 | prop        | Type           | Note  |
 | ------------- |:-------------:| -----:|
-| contactPerson      | object | data.contactPerson |
+| contactPerson      | object | contactPerson object provide by the parent page |
 | standAlonePage     | boolean      |   Has own Save button |
 | handleClientContactPersonSave     | function      |   perform save |
-| contactPersonDoneStatus     | function      |   broadcast done, usually use to show the rest of the fields on the page |
+| contactPersonDoneStatus     | function      |   broadcast done, usually use to show/hide the rest of the fields on the parent page |
 | standAloneLabel     | string      |   default is "Save" |
 | getErrorObj()     | function      |   let error = this.refs.contactPerson.getErrorObj(), error.type and error.msg available |
+| getDetails()     | function      |   let details = this.refs.contactPerson.getDetails() returns contactPerson object |
+| notShowHeading     | boolean      |   parent page will provide it's own heading, description. |
 
 
 
