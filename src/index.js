@@ -103,7 +103,7 @@ class ContactPerson extends React.Component {
   }
 
   isBlank = val => {
-     if (val === undefined || val === null || JSON.stringify(val) === "{}") {
+     if (val === "undefined" || val === null || JSON.stringify(val) === "{}") {
        return true;
      }
      if (typeof val === "string") {
