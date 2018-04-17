@@ -23,7 +23,7 @@ class ContactPerson extends React.Component {
     super(props);
     this.state = {
       contactPersonCode: window.IS_STAFF ? "OTHERCLIENT" : "ME",
-      contactPerson: props.contactPerson || undefined,
+      contactPerson: props.contactPerson,
       contactIsMe: props.contactPerson && props.contactPerson.currentUserIsContactPerson === true,
       contactPersonIsLINK: props.contactPerson && (props.contactPerson.otherClientDetails !== null),
       linkContactPersonCode:"LINK",
@@ -44,14 +44,14 @@ class ContactPerson extends React.Component {
   }
 
   componentWillMount = () => {
-    if(this.state.contactPerson) {
+    if(!this.isBlank(this.state.contactPerson)) {
       if(this.state.contactIsMe) {
         this.setState((prevState, props) => ({
           contactPersonCode: "ME",
           contactIsMe: true
         }))
       } else {
-        if(this.state.contactPersonIsLINK) {
+        if(this.state.contactPersonIsLINK ) {
           let contactPersonDoneStatus = true
           this.setState((prevState, props) => ({
             linkContactPersonCode: "LINK",
@@ -101,6 +101,23 @@ class ContactPerson extends React.Component {
       }
     }
   }
+
+  isBlank = val => {
+     if (val === undefined || val === null || JSON.stringify(val) === "{}") {
+       return true;
+     }
+     if (typeof val === "string") {
+       if (val.trim() == "") {
+         return true;
+       }
+     }
+     if (typeof val === "object") {
+       if (Object.keys(val).length === 0) {
+         return true;
+       }
+     }
+     return false;
+   };
 
   setContactPersonCode = (event) => {
     const contactPersonCode = event.target.value;
