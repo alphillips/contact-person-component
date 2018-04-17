@@ -44,8 +44,8 @@ let contactPerson =
 ```
 <ContactPerson
   ref="contactPerson"
-  contactPersonDoneStatus={this.contactPersonDoneStatus.bind(status)}
-  contactPersonMsg={this.updateMsg.bind(status)}
+  contactPersonDoneStatus={this.contactPersonDoneStatus}
+  contactPersonMsg={this.updateMsg}
   standAlonePage={false}
   notShowHeading={false}
   contactPerson={this.state.contactPerson}
