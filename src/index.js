@@ -102,22 +102,24 @@ class ContactPerson extends React.Component {
     }
   }
 
-  isBlank = val => {
-     if (val === "undefined" || val === null || JSON.stringify(val) === "{}") {
-       return true;
-     }
-     if (typeof val === "string") {
-       if (val.trim() == "") {
-         return true;
-       }
-     }
+  isBlank = (val) => {
+    // catch null and undefined
+    if(!val || JSON.stringify(val) === "{}") {
+      return true
+    }
+    if (typeof val === "string") {
+      if (val.trim() == "" || val === "undefined") {
+        return true;
+      }
+    }
      if (typeof val === "object") {
        if (Object.keys(val).length === 0) {
          return true;
        }
      }
      return false;
-   };
+  }
+
 
   setContactPersonCode = (event) => {
     const contactPersonCode = event.target.value;
