@@ -325,11 +325,11 @@ class ContactPerson extends React.Component {
 
   getDetails = () => {
    let person = {}
+   let searchID
+
    person.otherClientDetails = null
    person.otherPersonDetails = null
    person.currentUserIsContactPerson = false
-
-   let searchID
 
    if(this.state.foundClient){
      person.email = this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : null
@@ -342,22 +342,27 @@ class ContactPerson extends React.Component {
       searchID = null
    }
 
-    if (this.state.contactPersonCode === 'ME') {
-      person.currentUserIsContactPerson = true
+   if(window.IS_STAFF) {
+     person.currentUserIsContactPerson = false
+   } else {
+     if (this.state.contactPersonCode === 'ME') {
+       person.currentUserIsContactPerson = true
+     }
+   }
+
+    if(this.state.linkContactPersonCode === "LINK") {
+      person.otherClientDetails = {}
+      person.otherClientDetails.clientId = searchID
+      person.otherClientDetails.personDetails = {}
+      person.otherClientDetails.personDetails.firstName = this.state.foundContactFirstName
     } else {
-      if(this.state.linkContactPersonCode === "LINK") {
-        person.otherClientDetails = {}
-        person.otherClientDetails.clientId = searchID
-        person.otherClientDetails.personDetails = {}
-        person.otherClientDetails.personDetails.firstName = this.state.foundContactFirstName
-      } else {
-        person.otherPersonDetails = {}
-        person.otherPersonDetails.firstName = this.state.contactFirstName,
-        person.otherPersonDetails.lastName = this.state.contactLastName,
-        person.otherPersonDetails.phone = this.state.contactPhone,
-        person.otherPersonDetails.postalAddress = this.state.contactPersonAddress
-      }
+      person.otherPersonDetails = {}
+      person.otherPersonDetails.firstName = this.state.contactFirstName,
+      person.otherPersonDetails.lastName = this.state.contactLastName,
+      person.otherPersonDetails.phone = this.state.contactPhone,
+      person.otherPersonDetails.postalAddress = this.state.contactPersonAddress
     }
+
     return person
   }
 
