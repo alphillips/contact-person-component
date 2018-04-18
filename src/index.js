@@ -420,11 +420,13 @@ class ContactPerson extends React.Component {
 
     return (
       <div className="contact-person-component">
+        {this.state.standAlonePage &&
         <Messages
           success={this.state.success}
           error={this.state.error}
           info={this.state.info}
         />
+        }
         {!this.state.notShowHeading &&
           <h3>Contact Person</h3>
         }
