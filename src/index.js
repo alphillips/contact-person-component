@@ -107,17 +107,18 @@ class ContactPerson extends React.Component {
     // catch null and undefined
     if(!val || JSON.stringify(val) === "{}") {
       isBlank = true
-    }
-    if (typeof val === "string") {
-      if (val.trim() == "" || val === "undefined") {
-        isBlank = true;
+    } else {
+      if (typeof val === "string") {
+        if (val.trim() == "" || val === "undefined") {
+          isBlank = true;
+        }
       }
-    }
-     if (typeof val === "object") {
-       if (Object.keys(val).length === 0) {
-         isBlank = true;
+       if (typeof val === "object") {
+         if (Object.keys(val).length === 0) {
+           isBlank = true;
+         }
        }
-     }
+    }
      return isBlank;
   }
 
@@ -135,6 +136,12 @@ class ContactPerson extends React.Component {
       newSearch: true,
       contactPersonDoneStatus: contactPersonDoneStatus
     }));
+    this.errObj = {}
+    this.errObj.type = "error"
+    this.errObj.msg = ""
+
+    this.props.contactPersonMsg(this.errObj)
+
     this.props.contactPersonDoneStatus(contactPersonDoneStatus)
   };
 
@@ -255,6 +262,8 @@ class ContactPerson extends React.Component {
     this.errObj.type = "error"
     this.errObj.msg = ""
 
+    let msg = ""
+
     this.props.contactPersonMsg(this.errObj)
 
     if (this.state.linkContactPersonCode && this.state.linkContactPersonCode === "NOTLINK") {
@@ -282,13 +291,14 @@ class ContactPerson extends React.Component {
         this.setState((prevState, props) => ({
           contactPersonDoneStatus: contactPersonDoneStatus
         }))
-        this.props.contactPersonDoneStatus(contactPersonDoneStatus)
-
+        
         this.errObj = {}
         this.errObj.type = "error"
         this.errObj.msg = ""
 
         this.props.contactPersonMsg(this.errObj)
+
+        this.props.contactPersonDoneStatus(contactPersonDoneStatus)
       }
     } else {
       let contactPersonDoneStatus = true
