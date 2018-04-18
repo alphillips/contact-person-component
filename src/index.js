@@ -329,7 +329,11 @@ class ContactPerson extends React.Component {
         [field]: value,
         contactPersonDoneStatus: contactPersonDoneStatus
       }));
+      let errObj = {}
+      errObj.type = "error"
+      errObj.msg = ""
       this.props.contactPersonDoneStatus(contactPersonDoneStatus)
+      this.props.contactPersonMsg(this.errObj)
     };
   };
 
