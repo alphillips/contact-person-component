@@ -53,16 +53,16 @@ let contactPerson =
 
 updateMsg = status => {
   this.setState((prevState, props) => ({
-    [value.type]: value.msg
+    [status.type]: status.msg
   }));
-  if (value.msg !== "") {
+  if (status.msg !== "") {
     window.scroll(0, 0);
   }
 };
 
 contactPersonDoneStatus = status => {
   this.setState((prevState, props) => ({
-    contactPersonDoneStatus: value
+    contactPersonDoneStatus: status
   }));
 };
 
