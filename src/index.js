@@ -136,10 +136,6 @@ class ContactPerson extends React.Component {
       newSearch: true,
       contactPersonDoneStatus: contactPersonDoneStatus
     }));
-    let errObj = {}
-    errObj.type = "error"
-    errObj.msg = ""
-    this.props.contactPersonMsg(this.errObj)
 
     this.props.contactPersonDoneStatus(contactPersonDoneStatus)
   };
