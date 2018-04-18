@@ -136,7 +136,6 @@ class ContactPerson extends React.Component {
       newSearch: true,
       contactPersonDoneStatus: contactPersonDoneStatus
     }));
-
     this.props.contactPersonDoneStatus(contactPersonDoneStatus)
   };
 
@@ -256,12 +255,14 @@ class ContactPerson extends React.Component {
     this.errObj = {}
     this.errObj.type = "error"
     this.errObj.msg = ""
-    let msg = ""
 
     this.props.contactPersonMsg(this.errObj)
 
     if (this.state.linkContactPersonCode && this.state.linkContactPersonCode === "NOTLINK") {
-      if(this.isBlank(this.state.contactFirstName) || this.isBlank(this.state.contactLastName) || this.isBlank(this.state.contactEmail) || !this.isValidEmail(this.state.contactEmail)) {
+      if(this.state.contactFirstName === "" ||this.state.contactFirstName === null || this.state.contactLastName === null || this.state.contactLastName === "" || (this.state.contactEmail === "" || this.state.contactEmail === null || !this.isValidEmail(this.state.contactEmail))) {
+
+        let msg = ""
+        
         if(this.isBlank(this.state.contactFirstName)) {
           msg = "Contact first name cannot be blank"
         }
