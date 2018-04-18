@@ -277,7 +277,7 @@ class ContactPerson extends React.Component {
         if(this.isBlank(this.state.contactEmail)) {
           msg = "Contact email cannot be blank"
         }
-        if(this.isValidEmail(this.state.contactEmail)) {
+        if(!this.isValidEmail(this.state.contactEmail)) {
           msg = "Contact email needs to be a valid email"
         }
 
