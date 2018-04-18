@@ -136,6 +136,11 @@ class ContactPerson extends React.Component {
       newSearch: true,
       contactPersonDoneStatus: contactPersonDoneStatus
     }));
+    let errObj = {}
+    errObj.type = "error"
+    errObj.msg = ""
+    this.props.contactPersonMsg(this.errObj)
+
     this.props.contactPersonDoneStatus(contactPersonDoneStatus)
   };
 
@@ -329,11 +334,7 @@ class ContactPerson extends React.Component {
         [field]: value,
         contactPersonDoneStatus: contactPersonDoneStatus
       }));
-      let errObj = {}
-      errObj.type = "error"
-      errObj.msg = ""
       this.props.contactPersonDoneStatus(contactPersonDoneStatus)
-      this.props.contactPersonMsg(this.errObj)
     };
   };
 
