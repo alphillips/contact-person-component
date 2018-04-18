@@ -291,7 +291,7 @@ class ContactPerson extends React.Component {
         this.setState((prevState, props) => ({
           contactPersonDoneStatus: contactPersonDoneStatus
         }))
-        
+
         this.errObj = {}
         this.errObj.type = "error"
         this.errObj.msg = ""
