@@ -1,6 +1,10 @@
 {
   "name": "@react-ag-components/contact-person",
+<<<<<<< HEAD
   "version": "0.2.9",
+=======
+  "version": "0.2.8",
+>>>>>>> 758c035921a4e301090535af22612e61e456d108
   "description": "Contact Person React component",
   "main": "lib/index.js",
   "module": "es/index.js",
