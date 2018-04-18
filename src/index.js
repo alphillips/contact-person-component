@@ -260,26 +260,25 @@ class ContactPerson extends React.Component {
     this.props.contactPersonMsg(this.errObj)
 
     if (this.state.linkContactPersonCode && this.state.linkContactPersonCode === "NOTLINK") {
-      if(this.state.contactFirstName === "" ||this.state.contactFirstName === null || this.state.contactLastName === null || this.state.contactLastName === "" || (this.state.contactEmail === "" || this.state.contactEmail === null || !this.isValidEmail(this.state.contactEmail))) {
-      if(this.isBlank(this.state.contactFirstName)) {
-        msg = "Contact first name cannot be blank"
-      }
-      if(this.isBlank(this.state.contactLastName)) {
-        msg = "Contact last name cannot be blank"
-      }
-      if(this.isBlank(this.state.contactEmail)) {
-        msg = "Contact email cannot be blank"
-      }
-      if(this.isValidEmail(this.state.contactEmail)) {
-        msg = "Contact email needs to be a valid email"
-      }
+      if(this.isBlank(this.state.contactFirstName) || this.isBlank(this.state.contactLastName) || this.isBlank(this.state.contactEmail) || !this.isValidEmail(this.state.contactEmail)) {
+        if(this.isBlank(this.state.contactFirstName)) {
+          msg = "Contact first name cannot be blank"
+        }
+        if(this.isBlank(this.state.contactLastName)) {
+          msg = "Contact last name cannot be blank"
+        }
+        if(this.isBlank(this.state.contactEmail)) {
+          msg = "Contact email cannot be blank"
+        }
+        if(this.isValidEmail(this.state.contactEmail)) {
+          msg = "Contact email needs to be a valid email"
+        }
 
-      this.errObj = {}
-      this.errObj.type = "error"
-      this.errObj.msg = msg
+        this.errObj = {}
+        this.errObj.type = "error"
+        this.errObj.msg = msg
 
-      this.props.contactPersonMsg(this.errObj)
-      
+        this.props.contactPersonMsg(this.errObj)
       } else {
         let contactPersonDoneStatus = true
         this.setState((prevState, props) => ({
@@ -340,11 +339,11 @@ class ContactPerson extends React.Component {
 
   getDetails = () => {
    let person = {}
-   let searchID
-
    person.otherClientDetails = null
    person.otherPersonDetails = null
    person.currentUserIsContactPerson = false
+
+   let searchID
 
    if(this.state.foundClient){
      person.email = this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : null
@@ -357,27 +356,22 @@ class ContactPerson extends React.Component {
       searchID = null
    }
 
-   if(window.IS_STAFF) {
-     person.currentUserIsContactPerson = false
-   } else {
-     if (this.state.contactPersonCode === 'ME') {
-       person.currentUserIsContactPerson = true
-     }
-   }
-
-    if(this.state.linkContactPersonCode === "LINK") {
-      person.otherClientDetails = {}
-      person.otherClientDetails.clientId = searchID
-      person.otherClientDetails.personDetails = {}
-      person.otherClientDetails.personDetails.firstName = this.state.foundContactFirstName
+    if (this.state.contactPersonCode === 'ME') {
+      person.currentUserIsContactPerson = true
     } else {
-      person.otherPersonDetails = {}
-      person.otherPersonDetails.firstName = this.state.contactFirstName,
-      person.otherPersonDetails.lastName = this.state.contactLastName,
-      person.otherPersonDetails.phone = this.state.contactPhone,
-      person.otherPersonDetails.postalAddress = this.state.contactPersonAddress
+      if(this.state.linkContactPersonCode === "LINK") {
+        person.otherClientDetails = {}
+        person.otherClientDetails.clientId = searchID
+        person.otherClientDetails.personDetails = {}
+        person.otherClientDetails.personDetails.firstName = this.state.foundContactFirstName
+      } else {
+        person.otherPersonDetails = {}
+        person.otherPersonDetails.firstName = this.state.contactFirstName,
+        person.otherPersonDetails.lastName = this.state.contactLastName,
+        person.otherPersonDetails.phone = this.state.contactPhone,
+        person.otherPersonDetails.postalAddress = this.state.contactPersonAddress
+      }
     }
-
     return person
   }
 
