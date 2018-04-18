@@ -44,12 +44,32 @@ let contactPerson =
 ```
 <ContactPerson
   ref="contactPerson"
-  contactPersonDoneStatus={this.contactPersonDoneStatus}
-  contactPersonMsg={this.updateMsg}
+  contactPersonDoneStatus={this.contactPersonDoneStatus(status)}
+  contactPersonMsg={this.updateMsg(status)}
   standAlonePage={false}
   notShowHeading={false}
   contactPerson={this.state.contactPerson}
 />
+
+updateMsg = status => {
+  return value => {
+    this.setState((prevState, props) => ({
+      [status.type]: value.msg
+    }));
+  }
+  if (status.msg !== "") {
+    window.scroll(0, 0);
+  }
+};
+
+contactPersonDoneStatus = status => {
+  return value => {
+    this.setState((prevState, props) => ({
+      contactPersonDoneStatus: value
+    }));
+  }
+};
+
 
 ```
 

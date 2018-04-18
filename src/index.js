@@ -103,21 +103,22 @@ class ContactPerson extends React.Component {
   }
 
   isBlank = (val) => {
+    let isBlank = false
     // catch null and undefined
     if(!val || JSON.stringify(val) === "{}") {
-      return true
+      isBlank = true
     }
     if (typeof val === "string") {
       if (val.trim() == "" || val === "undefined") {
-        return true;
+        isBlank = true;
       }
     }
      if (typeof val === "object") {
        if (Object.keys(val).length === 0) {
-         return true;
+         isBlank = true;
        }
      }
-     return false;
+     return isBlank;
   }
 
 
@@ -254,17 +255,31 @@ class ContactPerson extends React.Component {
     this.errObj = {}
     this.errObj.type = "error"
     this.errObj.msg = ""
+    let msg = ""
 
     this.props.contactPersonMsg(this.errObj)
 
     if (this.state.linkContactPersonCode && this.state.linkContactPersonCode === "NOTLINK") {
       if(this.state.contactFirstName === "" ||this.state.contactFirstName === null || this.state.contactLastName === null || this.state.contactLastName === "" || (this.state.contactEmail === "" || this.state.contactEmail === null || !this.isValidEmail(this.state.contactEmail))) {
+      if(this.isBlank(this.state.contactFirstName)) {
+        msg = "Contact first name cannot be blank"
+      }
+      if(this.isBlank(this.state.contactLastName)) {
+        msg = "Contact last name cannot be blank"
+      }
+      if(this.isBlank(this.state.contactEmail)) {
+        msg = "Contact email cannot be blank"
+      }
+      if(this.isValidEmail(this.state.contactEmail)) {
+        msg = "Contact email needs to be a valid email"
+      }
 
-        this.errObj = {}
-        this.errObj.type = "error"
-        this.errObj.msg = "Please complete Contact Person details"
+      this.errObj = {}
+      this.errObj.type = "error"
+      this.errObj.msg = msg
 
-        this.props.contactPersonMsg(this.errObj)
+      this.props.contactPersonMsg(this.errObj)
+      
       } else {
         let contactPersonDoneStatus = true
         this.setState((prevState, props) => ({
