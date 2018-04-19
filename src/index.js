@@ -258,48 +258,10 @@ class ContactPerson extends React.Component {
     this.setState((prevState, props) => ({
       newSearch: false
     }))
-    this.errObj = {}
-    this.errObj.type = "error"
-    this.errObj.msg = ""
 
-    let msg = ""
-
-    this.props.contactPersonMsg(this.errObj)
+    this.triggerErrObj()
 
     if (this.state.linkContactPersonCode && this.state.linkContactPersonCode === "NOTLINK") {
-      if(this.isBlank(this.state.contactFirstName) || this.isBlank(this.state.contactLastName) || this.isBlank(this.state.contactEmail) || !this.isValidEmail(this.state.contactEmail)) {
-        if(this.isBlank(this.state.contactFirstName)) {
-          msg = "Contact first name cannot be blank"
-        }
-        if(this.isBlank(this.state.contactLastName)) {
-          msg = "Contact last name cannot be blank"
-        }
-        if(this.isBlank(this.state.contactEmail)) {
-          msg = "Contact email cannot be blank"
-        }
-        if(!this.isValidEmail(this.state.contactEmail)) {
-          msg = "Contact email needs to be a valid email"
-        }
-
-        this.errObj = {}
-        this.errObj.type = "error"
-        this.errObj.msg = msg
-
-        this.props.contactPersonMsg(this.errObj)
-      } else {
-        let contactPersonDoneStatus = true
-        this.setState((prevState, props) => ({
-          contactPersonDoneStatus: contactPersonDoneStatus
-        }))
-
-        this.errObj = {}
-        this.errObj.type = "error"
-        this.errObj.msg = ""
-
-        this.props.contactPersonMsg(this.errObj)
-
-        this.props.contactPersonDoneStatus(contactPersonDoneStatus)
-      }
     } else {
       let contactPersonDoneStatus = true
       this.setState((prevState, props) => ({
@@ -307,6 +269,8 @@ class ContactPerson extends React.Component {
       }))
       this.props.contactPersonDoneStatus(contactPersonDoneStatus)
     }
+
+    this.props.contactPersonMsg(this.errObj)
 
     if(this.state.standAlonePage){
       if(this.errObj.msg === "") {
@@ -341,7 +305,40 @@ class ContactPerson extends React.Component {
     };
   };
 
+  triggerErrObj = () => {
+    this.errObj = {}
+    this.errObj.type = "error"
+    this.errObj.msg = ""
+
+    let errMsg = ""
+
+    if (this.state.linkContactPersonCode && this.state.linkContactPersonCode === "NOTLINK") {
+      if(this.isBlank(this.state.contactFirstName) || this.isBlank(this.state.contactLastName) || this.isBlank(this.state.contactEmail) || !this.isValidEmail(this.state.contactEmail)) {
+        if(this.isBlank(this.state.contactFirstName)) {
+          errMsg = "Contact first name cannot be blank"
+        }
+        if(this.isBlank(this.state.contactLastName)) {
+          errMsg = "Contact last name cannot be blank"
+        }
+        if(this.isBlank(this.state.contactEmail)) {
+          errMsg = "Contact email cannot be blank"
+        }
+        if(!this.isValidEmail(this.state.contactEmail)) {
+          errMsg = "Contact email needs to be a valid email"
+        }
+      } else {
+        errMsg = ""
+      }
+      this.errObj.msg = errMsg
+    }
+  }
+
   getErrorObj = () => {
+    this.errObj = {}
+    this.errObj.type = "error"
+    this.errObj.msg = ""
+
+    this.triggerErrObj()
     return this.errObj
   }
 
