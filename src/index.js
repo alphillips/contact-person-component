@@ -262,7 +262,15 @@ class ContactPerson extends React.Component {
     this.triggerErrObj()
 
     if (this.state.linkContactPersonCode && this.state.linkContactPersonCode === "NOTLINK") {
-    } else {
+      if(this.isBlank(this.state.contactFirstName) || this.isBlank(this.state.contactLastName) || this.isBlank(this.state.contactEmail) || !this.isValidEmail(this.state.contactEmail)) {
+      } else {
+        let contactPersonDoneStatus = true
+        this.setState((prevState, props) => ({
+          contactPersonDoneStatus: contactPersonDoneStatus
+        }))
+        this.props.contactPersonDoneStatus(contactPersonDoneStatus)
+      }
+    }else {
       let contactPersonDoneStatus = true
       this.setState((prevState, props) => ({
         contactPersonDoneStatus: contactPersonDoneStatus
