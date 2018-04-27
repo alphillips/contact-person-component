@@ -34,7 +34,8 @@ class ContactPerson extends React.Component {
       contactLastName: null,
       showVerifyButton: false,
       foundClientDetail: {},
-      newSearch: true,
+      newSearch: !(props.contactPerson),
+      contactPersonDoneStatus: (props.contactPerson && true),
       standAlonePage: props.standAlonePage || false,
       standAloneLabel: props.standAloneLabel || "Save",
       hasChanged: false,
@@ -567,7 +568,7 @@ class ContactPerson extends React.Component {
         </MuiThemeProvider>
         )}
 
-        {!this.state.showVerifyButton && (this.state.newSearch || !this.state.contactPersonDoneStatus) && !this.state.standAlonePage &&
+        {(this.state.newSearch || !this.state.contactPersonDoneStatus) && !this.state.standAlonePage &&
           <button className="uikit-btn uikit-btn--tertiary search-button" onClick={this.handleClientContactPersonContinue}>Continue</button>
         }
         {!this.state.showVerifyButton &&  this.state.standAlonePage &&
