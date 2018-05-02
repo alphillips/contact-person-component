@@ -471,7 +471,7 @@ class ContactPerson extends React.Component {
           <div className="other-client-container">
             <MuiThemeProvider>
               <Input
-                label={"Contact Person Email or Client ID"}
+                label={"Contact person email or Client ID"}
                 id="search"
                 value={this.state.searchEmailKeyword}
                 onChange={this.updateSearchKeyword()}
