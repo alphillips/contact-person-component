@@ -383,7 +383,8 @@ class ContactPerson extends React.Component {
         person.otherPersonDetails.firstName = this.state.contactFirstName,
         person.otherPersonDetails.lastName = this.state.contactLastName,
         person.otherPersonDetails.phone = this.state.contactPhone,
-        person.otherPersonDetails.postalAddress = this.state.contactPersonAddress
+        person.otherPersonDetails.postalAddress = this.state.contactPersonAddress,
+        person.otherPersonDetails.email = this.state.contactEmail
       }
     }
     return person
