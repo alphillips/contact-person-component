@@ -56,7 +56,7 @@ class Demo extends Component {
       contactPerson={contactPerson.contactPerson}
       standAlonePage={false}
       handleClientContactPersonSave={this.handleClientContactPersonSave}
-      contactPersonDoneStatus={this.contactPersonDoneStatus.bind(status)}
+      contactPersonDoneStatus={this.contactPersonDoneStatus}
       notShowHeading={true}
       />
 
