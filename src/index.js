@@ -151,7 +151,8 @@ class ContactPerson extends React.Component {
     let contactPersonDoneStatus = contactPersonDoneStatus
     this.setState((prevState, props) => ({
       linkContactPersonCode: linkContactPersonCode,
-      contactPersonDoneStatus: false
+      contactPersonDoneStatus: false,
+      newSearch:true
     }))
     this.props.contactPersonDoneStatus(contactPersonDoneStatus)
   }
@@ -256,10 +257,6 @@ class ContactPerson extends React.Component {
   }
 
   handleClientContactPersonContinue = () => {
-    this.setState((prevState, props) => ({
-      newSearch: false
-    }))
-
     this.triggerErrObj()
 
     if (this.state.linkContactPersonCode && this.state.linkContactPersonCode === "NOTLINK") {
@@ -267,14 +264,16 @@ class ContactPerson extends React.Component {
       } else {
         let contactPersonDoneStatus = true
         this.setState((prevState, props) => ({
-          contactPersonDoneStatus: contactPersonDoneStatus
+          contactPersonDoneStatus: contactPersonDoneStatus,
+          newSearch: false
         }))
         this.props.contactPersonDoneStatus(contactPersonDoneStatus)
       }
     }else {
       let contactPersonDoneStatus = true
       this.setState((prevState, props) => ({
-        contactPersonDoneStatus: contactPersonDoneStatus
+        contactPersonDoneStatus: contactPersonDoneStatus,
+        newSearch: false
       }))
       this.props.contactPersonDoneStatus(contactPersonDoneStatus)
     }
@@ -568,7 +567,6 @@ class ContactPerson extends React.Component {
           </div>
         </MuiThemeProvider>
         )}
-
         {(!this.state.showVerifyButton && !this.state.contactPersonDoneStatus && !this.state.standAlonePage && this.state.newSearch) &&
           <button className="uikit-btn uikit-btn--tertiary search-button" onClick={this.handleClientContactPersonContinue}>Continue</button>
         }
