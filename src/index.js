@@ -567,10 +567,10 @@ class ContactPerson extends React.Component {
           </div>
         </MuiThemeProvider>
         )}
-        {(!this.state.showVerifyButton && !this.state.contactPersonDoneStatus && !this.state.standAlonePage && this.state.newSearch) &&
+        {(!this.state.showVerifyButton && !this.state.contactPersonDoneStatus && this.state.newSearch) &&
           <button className="uikit-btn uikit-btn--tertiary search-button" onClick={this.handleClientContactPersonContinue}>Continue</button>
         }
-        {!this.state.showVerifyButton &&  this.state.standAlonePage &&
+        {!this.state.showVerifyButton && this.state.standAlonePage &&
           <button className="uikit-btn main-btn search-button" onClick={this.handleClientContactPersonContinue}>{this.state.standAloneLabel}</button>
         }
       </div>
