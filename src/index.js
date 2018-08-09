@@ -567,7 +567,7 @@ class ContactPerson extends React.Component {
           </div>
         </MuiThemeProvider>
         )}
-        {(!this.state.showVerifyButton && !this.state.contactPersonDoneStatus && this.state.newSearch) &&
+        {(!this.state.showVerifyButton && (!this.state.contactPersonDoneStatus || this.state.newSearch) && !this.state.standAlonePage) &&
           <button className="uikit-btn uikit-btn--tertiary search-button" onClick={this.handleClientContactPersonContinue}>Continue</button>
         }
         {!this.state.showVerifyButton && this.state.standAlonePage &&
