@@ -320,27 +320,30 @@ class ContactPerson extends React.Component {
 
     let errMsg = ""
 
-    this.triggerFindClientContactPerson(this.state.searchEmailKeyword)
-
-    if (this.state.linkContactPersonCode && this.state.linkContactPersonCode === "NOTLINK") {
-      if(this.isBlank(this.state.contactFirstName) || this.isBlank(this.state.contactLastName) || this.isBlank(this.state.contactEmail) || !this.isValidEmail(this.state.contactEmail)) {
-        if(this.isBlank(this.state.contactFirstName)) {
-          errMsg = "Contact first name cannot be blank"
-        }
-        if(this.isBlank(this.state.contactLastName)) {
-          errMsg = "Contact last name cannot be blank"
-        }
-        if(this.isBlank(this.state.contactEmail)) {
-          errMsg = "Contact email cannot be blank"
-        }
-        if(!this.isValidEmail(this.state.contactEmail)) {
-          errMsg = "Contact email needs to be a valid email"
-        }
-      } else {
-        errMsg = ""
+    if(this.state.contactPersonCode === "OTHERCLIENT") {
+      if(this.isBlank(this.state.searchEmailKeyword)) {
+        errMsg = "Please provide Contact person email or Client ID"
       }
-      this.errObj.msg = errMsg
+      if (this.state.linkContactPersonCode && this.state.linkContactPersonCode === "NOTLINK") {
+        if(this.isBlank(this.state.contactFirstName) || this.isBlank(this.state.contactLastName) || this.isBlank(this.state.contactEmail) || !this.isValidEmail(this.state.contactEmail)) {
+          if(this.isBlank(this.state.contactFirstName)) {
+            errMsg = "Contact first name cannot be blank"
+          }
+          if(this.isBlank(this.state.contactLastName)) {
+            errMsg = "Contact last name cannot be blank"
+          }
+          if(this.isBlank(this.state.contactEmail)) {
+            errMsg = "Contact email cannot be blank"
+          }
+          if(!this.isValidEmail(this.state.contactEmail)) {
+            errMsg = "Contact email needs to be a valid email"
+          }
+        }
+      }
+    } else {
+      errMsg = ""
     }
+    this.errObj.msg = errMsg
   }
 
   getErrorObj = () => {
