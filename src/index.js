@@ -320,6 +320,8 @@ class ContactPerson extends React.Component {
 
     let errMsg = ""
 
+    this.triggerFindClientContactPerson(this.state.searchEmailKeyword)
+
     if (this.state.linkContactPersonCode && this.state.linkContactPersonCode === "NOTLINK") {
       if(this.isBlank(this.state.contactFirstName) || this.isBlank(this.state.contactLastName) || this.isBlank(this.state.contactEmail) || !this.isValidEmail(this.state.contactEmail)) {
         if(this.isBlank(this.state.contactFirstName)) {
