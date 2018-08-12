@@ -45,6 +45,9 @@ class ContactPerson extends React.Component {
   }
 
   componentWillMount = () => {
+    let errMsg = this.triggerErrMsg()
+    let noError = this.isBlank(errMsg)
+    let contactPersonDoneStatus = true
     if(!this.isBlank(this.state.contactPerson)) {
       if(this.state.contactIsMe) {
         this.setState((prevState, props) => ({
@@ -52,12 +55,13 @@ class ContactPerson extends React.Component {
           contactIsMe: true
         }))
       } else {
-        if(this.state.contactPersonIsLINK ) {
-          let contactPersonDoneStatus = true
+        let found = this.state.contactPerson && this.state.contactPerson.email
+        if(this.state.contactPersonIsLINK) {
           this.setState((prevState, props) => ({
             linkContactPersonCode: "LINK",
             contactPersonCode: "OTHERCLIENT",
-            foundClient: true,
+            foundClient: found,
+            showVerifyButton: !found,
             newSearch: false,
             personDetail: this.state.contactPerson.otherClientDetails.personDetails,
             foundContactFirstName: this.state.contactPerson.otherClientDetails.personDetails.firstName,
@@ -65,7 +69,6 @@ class ContactPerson extends React.Component {
           }))
           this.props.contactPersonDoneStatus(contactPersonDoneStatus)
         } else {
-          let contactPersonDoneStatus = true
           this.setState((prevState, props) => ({
             linkContactPersonCode: "NOTLINK",
             contactPersonCode: "OTHERCLIENT",
@@ -82,7 +85,7 @@ class ContactPerson extends React.Component {
         }
       }
     }else {
-      let contactPersonDoneStatus = false
+      contactPersonDoneStatus = false
       this.setState((prevState, props) => ({
         contactPersonCode: "ME",
         contactIsMe: true,
@@ -162,12 +165,8 @@ class ContactPerson extends React.Component {
   }
 
   triggerFindClientContactPerson = (keyword) => {
-    this.setState((prevState, props) => ({
-      showVerifyButton: false,
-      newSearch: true
-    }))
 
-    if(keyword !== null) {
+    if(!this.isBlank(keyword)) {
       let type
       let id
       if(this.isValidEmail(keyword)) {
@@ -182,6 +181,11 @@ class ContactPerson extends React.Component {
       this.errObj.msg = ""
 
       this.props.contactPersonMsg(this.errObj)
+
+      this.setState((prevState, props) => ({
+        showVerifyButton: false,
+        newSearch: true
+      }))
 
 
       const URL_BASE = window.IS_STAFF ? '/partyas-rest/internal/api/v1/client/' : '/partyas-rest/external/api/v1/client/'
@@ -257,7 +261,7 @@ class ContactPerson extends React.Component {
   }
 
   handleClientContactPersonContinue = () => {
-    this.triggerErrObj()
+    this.triggerErrMsg()
 
     if (this.state.linkContactPersonCode && this.state.linkContactPersonCode === "NOTLINK") {
       if(this.isBlank(this.state.contactFirstName) || this.isBlank(this.state.contactLastName) || this.isBlank(this.state.contactEmail) || !this.isValidEmail(this.state.contactEmail)) {
@@ -313,7 +317,7 @@ class ContactPerson extends React.Component {
     };
   };
 
-  triggerErrObj = () => {
+  triggerErrMsg = () => {
     this.errObj = {}
     this.errObj.type = "error"
     this.errObj.msg = ""
@@ -351,7 +355,7 @@ class ContactPerson extends React.Component {
     this.errObj.type = "error"
     this.errObj.msg = ""
 
-    this.triggerErrObj()
+    this.triggerErrMsg()
     return this.errObj
   }
 
