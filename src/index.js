@@ -308,12 +308,9 @@ class ContactPerson extends React.Component {
 
   onChange = field => {
     return value => {
-      let contactPersonDoneStatus = false
       this.setState((prevState, props) => ({
-        [field]: value,
-        contactPersonDoneStatus: contactPersonDoneStatus
+        [field]: value
       }));
-      this.props.contactPersonDoneStatus(contactPersonDoneStatus)
     };
   };
 
