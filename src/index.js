@@ -1,143 +1,586 @@
-import React from 'react'
-import { hashHistory } from 'react-router'
+import React from "react";
 
-import Messages from '@react-ag-components/messages'
-import ExporterApplicationMenu from './../ApplicationMenu'
-
-import Input from '@react-ag-components/input'
-// import ContactPerson from '@react-ag-components/contact-person'
-import ContactPerson from './../../../components/ContactPerson'
-import EmailInput from '@react-ag-components/email-input'
-import wrapPage from './../../../components/wrappers/PageWrapper'
+import Checkbox from "@react-ag-components/checkbox"
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
+import { RadioButtonGroup } from "material-ui/RadioButton"
 import RadioButton from '@react-ag-components/radiobutton'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import {RadioButtonGroup} from 'material-ui/RadioButton'
-import Address from '@react-ag-components/address'
-import Validator from './../Validator'
-import * as api from './../../../services/api'
+import EmailInput from '@react-ag-components/email-input'
+import Input from "@react-ag-components/input";
+import Address from "@react-ag-components/address";
+import SelectField from "material-ui/SelectField";
+import Messages from "@react-ag-components/messages";
+import * as api from "./api";
 
-class ExporterContact extends React.Component {
+import "./contactperson.css";
 
+const contactPersonOptions = [
+  { value: "ME", label: "I am the contact person" },
+  { value: "OTHERCLIENT", label: "Someone else is the contact person" }
+];
+
+class ContactPerson extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      success: props.success,
-      error: props.cache.contactPersonError ? props.cache.contactPersonError.msg : props.error,
-      info: props.info,
-      contactPerson: props.cache.contactPerson
+      contactPersonCode: window.IS_STAFF ? "OTHERCLIENT" : "ME",
+      contactPerson: props.contactPerson,
+      contactIsMe: props.contactPerson && props.contactPerson.currentUserIsContactPerson === true,
+      contactPersonIsLINK: props.contactPerson && (props.contactPerson.otherClientDetails !== null),
+      linkContactPersonCode:"LINK",
+      contactEmail: props.contactPerson && props.contactPerson.email,
+      searchEmailKeyword: props.contactPerson !== undefined ? props.contactPerson.email : null,
+      foundClient: false,
+      foundContactFirstName:"",
+      contactLastName: null,
+      showVerifyButton: false,
+      foundClientDetail: {},
+      newSearch: !(props.contactPerson),
+      contactPersonDoneStatus: (props.contactPerson && true),
+      standAlonePage: props.standAlonePage || false,
+      standAloneLabel: props.standAloneLabel || "Save",
+      hasChanged: false,
+      notShowHeading: props.notShowHeading || false
+    };
+    this.errObj = {}
+  }
+
+  componentWillMount = () => {
+    let errMsg = this.triggerErrMsg()
+    let noError = this.isBlank(errMsg)
+    let contactPersonDoneStatus = true
+    if(!this.isBlank(this.state.contactPerson)) {
+      if(this.state.contactIsMe) {
+        this.setState((prevState, props) => ({
+          contactPersonCode: "ME",
+          contactIsMe: true
+        }))
+      } else {
+        let found = this.state.contactPerson && this.state.contactPerson.email
+        if(this.state.contactPersonIsLINK) {
+          this.setState((prevState, props) => ({
+            linkContactPersonCode: "LINK",
+            contactPersonCode: "OTHERCLIENT",
+            foundClient: found,
+            showVerifyButton: !found,
+            newSearch: false,
+            personDetail: this.state.contactPerson.otherClientDetails.personDetails,
+            foundContactFirstName: this.state.contactPerson.otherClientDetails.personDetails.firstName,
+            contactPersonDoneStatus: contactPersonDoneStatus
+          }))
+          this.props.contactPersonDoneStatus(contactPersonDoneStatus)
+        } else {
+          this.setState((prevState, props) => ({
+            linkContactPersonCode: "NOTLINK",
+            contactPersonCode: "OTHERCLIENT",
+            showManualClientEntry: true,
+            foundClient: false,
+            newSearch: false,
+            contactFirstName: this.state.contactPerson.otherPersonDetails.firstName,
+            contactLastName: this.state.contactPerson.otherPersonDetails.lastName,
+            contactPhone: this.state.contactPerson.otherPersonDetails.phone,
+            contactPersonAddress: this.state.contactPerson.otherPersonDetails.postalAddress,
+            contactPersonDoneStatus: contactPersonDoneStatus
+          }))
+          this.props.contactPersonDoneStatus(contactPersonDoneStatus)
+        }
+      }
+    }else {
+      contactPersonDoneStatus = false
+      this.setState((prevState, props) => ({
+        contactPersonCode: "ME",
+        contactIsMe: true,
+        foundClient: false,
+        showVerifyButton: window.IS_STAFF ? true : false,
+        newSearch: true,
+        contactPersonDoneStatus: contactPersonDoneStatus,
+        searchEmailKeyword: null,
+        contactLastName: null
+      }))
+      this.props.contactPersonDoneStatus(contactPersonDoneStatus)
+      if (window.IS_STAFF) {
+        this.setState((prevState, props) => ({
+          contactPersonCode: "OTHERCLIENT",
+          contactIsMe: false
+        }))
+      }
     }
   }
-  componentDidMount() {
-    let person = this.person
-     api.getUser().then(
-       data => {
-         this.setState((prevState, props) => ({
-          currentUserName: data.firstName + " " + data.lastName,
-          currentUserLogonId: data.logonId
-         }))
-       }
-     )
-   }
 
-  componentWillReceiveProps(nextProps) {
-   if(nextProps.value) {
-     this.setState((prevState, props) => ({
-       value: nextProps.value
-     }))
-   }
+  isBlank = (val) => {
+    let isBlank = false
+    // catch null and undefined
+    if(!val || JSON.stringify(val) === "{}") {
+      isBlank = true
+    } else {
+      if (typeof val === "string") {
+        if (val.trim() == "" || val === "undefined") {
+          isBlank = true;
+        }
+      }
+       if (typeof val === "object") {
+         if (Object.keys(val).length === 0) {
+           isBlank = true;
+         }
+       }
+    }
+     return isBlank;
   }
 
-  componentWillUnmount = () => {
-    let details = this.getDetails()
-    this.props.saveCache('contactPerson', details.contactPerson);
-    let error = this.refs.contactPerson.getErrorObj();
-    this.props.saveCache('contactPersonError', error);
+  setContactPersonCode = (event) => {
+    const contactPersonCode = event.target.value;
+    let contactPersonDoneStatus = false
+    this.setState((prevState, props) => ({
+      contactPersonCode: contactPersonCode,
+      contactIsMe: contactPersonCode === "ME" ? true : false,
+      linkContactPersonCode: contactPersonCode === "ME" ? "" : "LINK",
+      searchEmailKeyword: null,
+      foundClient: false,
+      showManualClientEntry:false,
+      showVerifyButton: contactPersonCode === "OTHERCLIENT" ? true : false,
+      newSearch: true,
+      contactPersonDoneStatus: contactPersonDoneStatus
+    }));
+    this.errObj = {}
+    this.errObj.type = "error"
+    this.errObj.msg = ""
+
+    this.props.contactPersonMsg(this.errObj)
+
+    this.props.contactPersonDoneStatus(contactPersonDoneStatus)
+  };
+
+  linkContactPerson = (e) => {
+    const linkContactPersonCode = e.target.value;
+    let contactPersonDoneStatus = contactPersonDoneStatus
+    this.setState((prevState, props) => ({
+      linkContactPersonCode: linkContactPersonCode,
+      contactPersonDoneStatus: false,
+      newSearch:true
+    }))
+    this.props.contactPersonDoneStatus(contactPersonDoneStatus)
+  }
+
+  isValidEmail = (value) => {
+    return (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value))
+  }
+
+  triggerFindClientContactPerson = (keyword) => {
+
+    if(!this.isBlank(keyword)) {
+      let type
+      let id
+      if(this.isValidEmail(keyword)) {
+        type = "email"
+      } else {
+        type = "client-id"
+      }
+      id = keyword
+
+      this.errObj = {}
+      this.errObj.type = "error"
+      this.errObj.msg = ""
+
+      this.props.contactPersonMsg(this.errObj)
+
+      this.setState((prevState, props) => ({
+        showVerifyButton: false,
+        newSearch: true
+      }))
+
+
+      const URL_BASE = window.IS_STAFF ? '/partyas-rest/internal/api/v1/client/' : '/partyas-rest/external/api/v1/client/'
+
+      fetch(URL_BASE + type + "/" + id, { credentials: 'same-origin' }).then(
+
+      response => {
+        if (response.status === 200) {
+
+          response.text().then(data => {
+            let parsedData = JSON.parse(data)
+
+            if(parsedData.firstName !== null ) {
+
+              let contactEmail = this.isValidEmail(keyword) ? keyword : null
+              let contactId = null
+
+              if(contactEmail === null ){
+                contactId = keyword
+              }
+
+              this.setState((prevState, props) => ({
+                contactPersonDetail: parsedData,
+                contactFirstName: parsedData.firstName,
+                foundContactFirstName: parsedData.firstName,
+                contactEmail: contactEmail,
+                contactId: contactId,
+                foundClient: true,
+                showManualClientEntry: false
+              }))
+              {!window.IS_STAFF &&
+                this.setState((prevState, props) => ({
+                  foundContactFirstName: parsedData.firstName,
+                  foundContactLastName: parsedData.lastName,
+                  foundContactPhone: parsedData.phone,
+                }))
+              }
+            } else {
+              this.setState((prevState, props) => ({
+                foundClient: false,
+                showManualClientEntry: true,
+                contactPersonCode: "OTHERCLIENT",
+                contactIsMe: false,
+                linkContactPersonCode:"NOTLINK"
+              }))
+            }
+          })
+        } else {
+          this.errObj = {}
+          this.errObj.type = "error"
+          this.errObj.msg = "There was an error with the server"
+
+          this.props.contactPersonMsg(this.errObj)
+
+          this.setState((prevState, props) => ({
+            showVerifyButton: true,
+            newSearch: true
+          }))
+        }
+      })
+    }else {
+      this.errObj = {}
+      this.errObj.type = "error"
+      this.errObj.msg = "Please provide Contact person email or Client ID"
+
+      this.props.contactPersonMsg(this.errObj)
+
+      this.setState((prevState, props) => ({
+        showVerifyButton: true,
+        newSearch: true
+      }))
+    }
+  }
+
+  handleClientContactPersonContinue = () => {
+    this.triggerErrMsg()
+
+    if (this.state.linkContactPersonCode && this.state.linkContactPersonCode === "NOTLINK") {
+      if(this.isBlank(this.state.contactFirstName) || this.isBlank(this.state.contactLastName) || this.isBlank(this.state.contactEmail) || !this.isValidEmail(this.state.contactEmail)) {
+      } else {
+        let contactPersonDoneStatus = true
+        this.setState((prevState, props) => ({
+          contactPersonDoneStatus: contactPersonDoneStatus,
+          newSearch: false
+        }))
+        this.props.contactPersonDoneStatus(contactPersonDoneStatus)
+      }
+    }else {
+      let contactPersonDoneStatus = true
+      this.setState((prevState, props) => ({
+        contactPersonDoneStatus: contactPersonDoneStatus,
+        newSearch: false
+      }))
+      this.props.contactPersonDoneStatus(contactPersonDoneStatus)
+    }
+
+    this.props.contactPersonMsg(this.errObj)
+
+    if(this.state.standAlonePage){
+      if(this.errObj.msg === "") {
+        this.props.handleClientContactPersonSave()
+      }
+    }
+  }
+
+  updateSearchKeyword = () => {
+    return value => {
+      let contactPersonDoneStatus = false
+      this.setState((prevState, props) => ({
+        error: "",
+        searchEmailKeyword: value,
+        foundClient: false,
+        showVerifyButton: true,
+        newSearch: true,
+        contactPersonDoneStatus: contactPersonDoneStatus
+      }))
+      this.props.contactPersonDoneStatus(contactPersonDoneStatus)
+    }
+  }
+
+  onChange = field => {
+    return value => {
+      this.setState((prevState, props) => ({
+        [field]: value
+      }));
+    };
+  };
+
+  triggerErrMsg = () => {
+    this.errObj = {}
+    this.errObj.type = "error"
+    this.errObj.msg = ""
+
+    let errMsg = ""
+
+    if(this.state.contactPersonCode === "OTHERCLIENT") {
+      if(this.isBlank(this.state.searchEmailKeyword)) {
+        errMsg = "Please provide Contact person email or Client ID"
+      }
+      if (this.state.linkContactPersonCode && this.state.linkContactPersonCode === "NOTLINK") {
+        if(this.isBlank(this.state.contactFirstName) || this.isBlank(this.state.contactLastName) || this.isBlank(this.state.contactEmail) || !this.isValidEmail(this.state.contactEmail)) {
+          if(this.isBlank(this.state.contactFirstName)) {
+            errMsg = "Contact first name cannot be blank"
+          }
+          if(this.isBlank(this.state.contactLastName)) {
+            errMsg = "Contact last name cannot be blank"
+          }
+          if(this.isBlank(this.state.contactEmail)) {
+            errMsg = "Contact email cannot be blank"
+          }
+          if(!this.isValidEmail(this.state.contactEmail)) {
+            errMsg = "Contact email needs to be a valid email"
+          }
+        }
+      }
+    } else {
+      errMsg = ""
+    }
+    this.errObj.msg = errMsg
+  }
+
+  getErrorObj = () => {
+    this.errObj = {}
+    this.errObj.type = "error"
+    this.errObj.msg = ""
+
+    this.triggerErrMsg()
+    return this.errObj
   }
 
   getDetails = () => {
-    let details = {}
-    let contactPerson = {}
-    contactPerson = this.refs.contactPerson.getDetails();
-    details.contactPerson = contactPerson
-    return details
+   let person = {}
+   person.otherClientDetails = null
+   person.otherPersonDetails = null
+   person.currentUserIsContactPerson = false
+
+   let searchID
+
+   if(this.state.foundClient){
+     person.email = this.isValidEmail(this.state.searchEmailKeyword) ? this.state.searchEmailKeyword : null
+
+     if (person.email === null) {
+       searchID = this.state.searchEmailKeyword
+     }
+   } else {
+      person.email = this.state.contactEmail
+      searchID = null
+   }
+
+    if (this.state.contactPersonCode === 'ME') {
+      person.currentUserIsContactPerson = true
+    } else {
+      if(this.state.linkContactPersonCode === "LINK") {
+        person.otherClientDetails = {}
+        person.otherClientDetails.clientId = searchID
+        person.otherClientDetails.personDetails = {}
+        person.otherClientDetails.personDetails.firstName = this.state.foundContactFirstName
+      } else {
+        person.otherPersonDetails = {}
+        person.otherPersonDetails.firstName = this.state.contactFirstName,
+        person.otherPersonDetails.lastName = this.state.contactLastName,
+        person.otherPersonDetails.phone = this.state.contactPhone,
+        person.otherPersonDetails.postalAddress = this.state.contactPersonAddress,
+        person.otherPersonDetails.email = this.state.contactEmail
+      }
+    }
+    return person
   }
 
-  contactPersonDoneStatus = status => {
-    this.setState((prevState, props) => ({
-      contactPersonDoneStatus: status
-    }));
-  };
+  contactPersonHasChanged = () => {
+    let hasChanged = false
 
-  updateMsg = status => {
-    this.setState((prevState, props) => ({
-      [status.type]: status.msg
-    }));
-    if (status.msg !== "") {
-      window.scroll(0, 0);
+    if (this.state.contactIsMe) {
+        hasChanged = (this.state.contactIsMe !== this.state.contactPerson.currentUserIsContactPerson)
+    } else {
+      if(this.state.linkContactPersonCode === "LINK") {
+        hasChanged = (this.state.contactEmail !== this.state.contactPerson.email)
+      } else {
+        hasChanged = (this.state.contactPerson.otherPersonDetails !== null ? (this.state.contactFirstName !== this.state.contactPerson.otherPersonDetails.firstName) : true ||
+          (this.state.contactLastName !== this.state.contactPerson.otherPersonDetails.lastName) ||
+          (this.state.contactEmail !== this.state.contactPerson.email) ||
+          (this.state.contactPhone !== this.state.contactPerson.otherPersonDetails.phone) ||
+          (this.state.contactPersonAddress !== this.state.contactPerson.otherPersonDetails.postalAddress) )
+      }
     }
-  };
-
-
-  handleNext = () => {
-    let data = this.getDetails()
-    let error = this.refs.contactPerson.getErrorObj()
-
-    if(error.msg === ""){
-       hashHistory.push('/exporter/print/' )
-    }
+    return(hasChanged)
   }
 
   render() {
-
     const checkStyle = {
-      marginTop: '1em',
-      'color':'#999'
-    }
+      marginTop: "1em",
+      color: "#999"
+    };
 
     const checkLabelStyle = {
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif'
-    }
+      fontFamily:
+        '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif'
+    };
 
-    let count = 0
+    const selectFieldStyle = {
+      width: "100%",
+      'color':'#999'
+    };
 
     return (
-      <div>
+      <div className="contact-person-component">
+        {this.state.standAlonePage &&
+        <Messages
+          success={this.state.success}
+          error={this.state.error}
+          info={this.state.info}
+        />
+        }
+        {!this.state.notShowHeading &&
+          <h3>Contact Person</h3>
+        }
+        {!window.IS_STAFF &&
+          <MuiThemeProvider>
 
-        <div className="page-menu-grid">
+            <RadioButtonGroup
+              name="contactPersonMode"
+              defaultSelected={this.state.contactPersonCode}
+              onChange={this.setContactPersonCode}
+              valueSelected={this.state.contactPersonCode}
+            >
+              {!window.IS_STAFF &&
+                <RadioButton
+                  value="ME"
+                  label="I am the contact person"
+                  style={checkStyle}
+                  labelStyle={checkLabelStyle}
+                  name="radio-contactPersonMode"
+                />
+              }
+              <RadioButton
+                value="OTHERCLIENT"
+                label="Someone else is the contact person"
+                style={checkStyle}
+                labelStyle={checkLabelStyle}
+                name="radio-contactPersonMode"
+              />
 
-          <h1 className="inpage-header">Register to be an Exporter</h1>
+            </RadioButtonGroup>
 
-          <ExporterApplicationMenu current="exportercontact" />
-          <div className="page">
+          </MuiThemeProvider>
+        }
 
-          <Messages
-            success={this.state.success}
-            error={this.state.error}
-            info={this.state.info}
-            warning={this.state.warning}
-          />
+        {(this.state.contactPersonCode === "OTHERCLIENT" || window.IS_STAFF) && (
+          <div className="other-client-container">
+            <MuiThemeProvider>
+              <Input
+                label={"Contact person email or Client ID"}
+                id="search"
+                value={this.state.searchEmailKeyword}
+                onChange={this.updateSearchKeyword()}
+                placeholder={
+                  "Client Email"
+                }
+              />
+            </MuiThemeProvider>
 
-          <div className="page-header-grid">
-            <div className="page-header">
-              <h2>Exporter Contact</h2>
-            </div>
+            {this.state.showVerifyButton &&
+              <button className="uikit-btn uikit-btn--tertiary search-button" onClick={this.triggerFindClientContactPerson.bind(this,this.state.searchEmailKeyword)}>Search for existing client</button>
+            }
+
+              {this.state.foundClient &&
+                <div>
+                  <p className="info-text">{this.state.newSearch && "Existing client has been found. "} Update email address or client id to change contact person.</p>
+                    <div>
+                      <MuiThemeProvider>
+                        <RadioButtonGroup
+                          name="linkContactPersonMode"
+                          defaultSelected={this.state.linkContactPersonCode}
+                          onChange={this.linkContactPerson}
+                          valueSelected={this.state.linkContactPersonCode}
+                        >
+                          <RadioButton
+                            value="LINK"
+                            label={this.state.newSearch ? ("Use this existing client. '"  + this.state.foundContactFirstName  + "' as the contact person.") : (this.state.foundContactFirstName + " is the contact person.")}
+                            style={checkStyle}
+                            labelStyle={checkLabelStyle}
+                            name="radio-linkContactPerson"
+                          />
+                          <RadioButton
+                            value="NOTLINK"
+                            label="Don't link to the existing client, enter details manually."
+                            style={checkStyle}
+                            labelStyle={checkLabelStyle}
+                            name="radio-linkContactPerson"
+                          />
+
+                        </RadioButtonGroup>
+
+                      </MuiThemeProvider>
+                    </div>
+                </div>
+              }
           </div>
+        )}
+        {(this.state.showManualClientEntry  || (this.state.linkContactPersonCode === "NOTLINK")) && (!this.state.showVerifyButton) &&(
+          <MuiThemeProvider>
+          <div>
+            {!this.state.foundClient &&
+              <p className="info-text">{this.state.newSearch && "There is no client match. "} Update email address or client id to change contact person.</p>
+            }
+            <h3>Detail of Contact Person</h3>
 
-          <ContactPerson
-            ref="contactPerson"
-            contactPersonDoneStatus={this.contactPersonDoneStatus}
-            contactPersonMsg={this.updateMsg}
-            standAlonePage={true}
-            standAloneLabel="Next"
-            notShowHeading={true}
-            contactPerson={this.state.contactPerson}
-            handleClientContactPersonSave = {this.handleNext}
-          />
+            <div className="half-area">
+              <Input
+                label="First name"
+                id="contact-name"
+                value={this.state.contactFirstName}
+                onChange={this.onChange("contactFirstName")}
+                required={true}
+              />
+              <Input
+                label="Last name"
+                id="contact-name"
+                value={this.state.contactLastName}
+                onChange={this.onChange("contactLastName")}
+                required={true}
+              />
 
+              <EmailInput
+                label="Email"
+                id="contact-email"
+                value={this.state.contactEmail}
+                onChange={this.onChange("contactEmail")}
+                required={true}
+              />
+
+              <Input
+                label="Phone (if known)"
+                id="contact-phone"
+                value={this.state.contactPhone}
+                onChange={this.onChange("contactPhone")}
+              />
+            </div>
+
+            <Address
+              label="Postal address (if known)"
+              value={this.state.contactPersonAddress}
+              onChange={this.onChange("contactPersonAddress")}
+            />
+          </div>
+        </MuiThemeProvider>
+        )}
+        {(!this.state.showVerifyButton && (!this.state.contactPersonDoneStatus || this.state.newSearch) && !this.state.standAlonePage) &&
+          <button className="uikit-btn uikit-btn--tertiary search-button" onClick={this.handleClientContactPersonContinue}>Continue</button>
+        }
+        {!this.state.showVerifyButton && this.state.standAlonePage &&
+          <button className="uikit-btn main-btn search-button" onClick={this.handleClientContactPersonContinue}>{this.state.standAloneLabel}</button>
+        }
       </div>
-    </div>
-  </div>
-    )
+    );
   }
 }
-export default wrapPage()(ExporterContact)
+export default ContactPerson;
