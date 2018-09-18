@@ -1,6 +1,6 @@
 {
   "name": "@react-ag-components/contact-person",
-  "version": "0.5.23",
+  "version": "0.5.24",
   "description": "Contact Person React component",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -26,7 +26,7 @@
     "@react-ag-components/checkbox": "latest",
     "@react-ag-components/core": "latest",
     "@react-ag-components/email-input": "latest",
-    "@react-ag-components/input": "^0.1.9",
+    "@react-ag-components/input": "latest",
     "@react-ag-components/messages": "latest",
     "@react-ag-components/radiobutton": "latest",
     "@react-ag-components/reference-data-selector": "latest",

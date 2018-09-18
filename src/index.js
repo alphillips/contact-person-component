@@ -23,6 +23,7 @@ class ContactPerson extends React.Component {
     super(props);
     this.state = {
       contactPersonCode: window.IS_STAFF ? "OTHERCLIENT" : "ME",
+      label:props.label || "Contact Person",
       contactPerson: props.contactPerson,
       contactIsMe: props.contactPerson && props.contactPerson.currentUserIsContactPerson === true,
       contactPersonIsLINK: props.contactPerson && (props.contactPerson.otherClientDetails !== null),
@@ -440,7 +441,7 @@ class ContactPerson extends React.Component {
         />
         }
         {!this.state.notShowHeading &&
-          <h3>Contact Person</h3>
+          <h3>{this.state.label}</h3>
         }
         {!window.IS_STAFF &&
           <MuiThemeProvider>
