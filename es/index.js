@@ -1,62 +1,25 @@
-"use strict";
-
-exports.__esModule = true;
-
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _react = require("react");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _checkbox = require("@react-ag-components/checkbox");
-
-var _checkbox2 = _interopRequireDefault(_checkbox);
-
-var _MuiThemeProvider = require("material-ui/styles/MuiThemeProvider");
-
-var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
-
-var _RadioButton = require("material-ui/RadioButton");
-
-var _radiobutton = require("@react-ag-components/radiobutton");
-
-var _radiobutton2 = _interopRequireDefault(_radiobutton);
-
-var _emailInput = require("@react-ag-components/email-input");
-
-var _emailInput2 = _interopRequireDefault(_emailInput);
-
-var _input = require("@react-ag-components/input");
-
-var _input2 = _interopRequireDefault(_input);
-
-var _address = require("@react-ag-components/address");
-
-var _address2 = _interopRequireDefault(_address);
-
-var _SelectField = require("material-ui/SelectField");
-
-var _SelectField2 = _interopRequireDefault(_SelectField);
-
-var _messages = require("@react-ag-components/messages");
-
-var _messages2 = _interopRequireDefault(_messages);
-
-var _api = require("./api");
-
-var api = _interopRequireWildcard(_api);
-
-require("./contactperson.css");
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+import React from "react";
+
+import Checkbox from "@react-ag-components/checkbox";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import { RadioButtonGroup } from "material-ui/RadioButton";
+import RadioButton from '@react-ag-components/radiobutton';
+import EmailInput from '@react-ag-components/email-input';
+import Input from "@react-ag-components/input";
+import Address from "@react-ag-components/address";
+import SelectField from "material-ui/SelectField";
+import Messages from "@react-ag-components/messages";
+import * as api from "./api";
+
+import "./contactperson.css";
 
 var contactPersonOptions = [{ value: "ME", label: "I am the contact person" }, { value: "OTHERCLIENT", label: "Someone else is the contact person" }];
 
@@ -501,38 +464,38 @@ var ContactPerson = function (_React$Component) {
       'color': '#999'
     };
 
-    return _react2.default.createElement(
+    return React.createElement(
       "div",
       { className: "contact-person-component" },
-      this.state.standAlonePage && _react2.default.createElement(_messages2.default, {
+      this.state.standAlonePage && React.createElement(Messages, {
         success: this.state.success,
         error: this.state.error,
         info: this.state.info
       }),
-      !this.state.notShowHeading && _react2.default.createElement(
+      !this.state.notShowHeading && React.createElement(
         "h3",
         null,
         this.state.label
       ),
-      !window.IS_STAFF && _react2.default.createElement(
-        _MuiThemeProvider2.default,
+      !window.IS_STAFF && React.createElement(
+        MuiThemeProvider,
         null,
-        _react2.default.createElement(
-          _RadioButton.RadioButtonGroup,
+        React.createElement(
+          RadioButtonGroup,
           {
             name: "contactPersonMode",
             defaultSelected: this.state.contactPersonCode,
             onChange: this.setContactPersonCode,
             valueSelected: this.state.contactPersonCode
           },
-          !window.IS_STAFF && _react2.default.createElement(_radiobutton2.default, {
+          !window.IS_STAFF && React.createElement(RadioButton, {
             value: "ME",
             label: "I am the contact person",
             style: checkStyle,
             labelStyle: checkLabelStyle,
             name: "radio-contactPersonMode"
           }),
-          _react2.default.createElement(_radiobutton2.default, {
+          React.createElement(RadioButton, {
             value: "OTHERCLIENT",
             label: "Someone else is the contact person",
             style: checkStyle,
@@ -541,13 +504,13 @@ var ContactPerson = function (_React$Component) {
           })
         )
       ),
-      (this.state.contactPersonCode === "OTHERCLIENT" || window.IS_STAFF) && _react2.default.createElement(
+      (this.state.contactPersonCode === "OTHERCLIENT" || window.IS_STAFF) && React.createElement(
         "div",
         { className: "other-client-container" },
-        _react2.default.createElement(
-          _MuiThemeProvider2.default,
+        React.createElement(
+          MuiThemeProvider,
           null,
-          _react2.default.createElement(_input2.default, {
+          React.createElement(Input, {
             label: "Contact person email or Client ID",
             id: "search",
             value: this.state.searchEmailKeyword,
@@ -555,42 +518,42 @@ var ContactPerson = function (_React$Component) {
             placeholder: "Client Email"
           })
         ),
-        this.state.showVerifyButton && _react2.default.createElement(
+        this.state.showVerifyButton && React.createElement(
           "button",
           { className: "uikit-btn uikit-btn--tertiary search-button", onClick: this.triggerFindClientContactPerson.bind(this, this.state.searchEmailKeyword) },
           "Search for existing client"
         ),
-        this.state.foundClient && _react2.default.createElement(
+        this.state.foundClient && React.createElement(
           "div",
           null,
-          _react2.default.createElement(
+          React.createElement(
             "p",
             { className: "info-text" },
             this.state.newSearch && "Existing client has been found. ",
             " Update email address or client id to change contact person."
           ),
-          _react2.default.createElement(
+          React.createElement(
             "div",
             null,
-            _react2.default.createElement(
-              _MuiThemeProvider2.default,
+            React.createElement(
+              MuiThemeProvider,
               null,
-              _react2.default.createElement(
-                _RadioButton.RadioButtonGroup,
+              React.createElement(
+                RadioButtonGroup,
                 {
                   name: "linkContactPersonMode",
                   defaultSelected: this.state.linkContactPersonCode,
                   onChange: this.linkContactPerson,
                   valueSelected: this.state.linkContactPersonCode
                 },
-                _react2.default.createElement(_radiobutton2.default, {
+                React.createElement(RadioButton, {
                   value: "LINK",
                   label: this.state.newSearch ? "Use this existing client. '" + this.state.foundContactFirstName + "' as the contact person." : this.state.foundContactFirstName + " is the contact person.",
                   style: checkStyle,
                   labelStyle: checkLabelStyle,
                   name: "radio-linkContactPerson"
                 }),
-                _react2.default.createElement(_radiobutton2.default, {
+                React.createElement(RadioButton, {
                   value: "NOTLINK",
                   label: "Don't link to the existing client, enter details manually.",
                   style: checkStyle,
@@ -602,67 +565,67 @@ var ContactPerson = function (_React$Component) {
           )
         )
       ),
-      (this.state.showManualClientEntry || this.state.linkContactPersonCode === "NOTLINK") && !this.state.showVerifyButton && _react2.default.createElement(
-        _MuiThemeProvider2.default,
+      (this.state.showManualClientEntry || this.state.linkContactPersonCode === "NOTLINK") && !this.state.showVerifyButton && React.createElement(
+        MuiThemeProvider,
         null,
-        _react2.default.createElement(
+        React.createElement(
           "div",
           null,
-          !this.state.foundClient && _react2.default.createElement(
+          !this.state.foundClient && React.createElement(
             "p",
             { className: "info-text" },
             this.state.newSearch && "There is no client match. ",
             " Update email address or client id to change contact person."
           ),
-          _react2.default.createElement(
+          React.createElement(
             "h3",
             null,
             "Detail of Contact Person"
           ),
-          _react2.default.createElement(
+          React.createElement(
             "div",
             { className: "half-area" },
-            _react2.default.createElement(_input2.default, {
+            React.createElement(Input, {
               label: "First name",
               id: "contact-name",
               value: this.state.contactFirstName,
               onChange: this.onChange("contactFirstName"),
               required: true
             }),
-            _react2.default.createElement(_input2.default, {
+            React.createElement(Input, {
               label: "Last name",
               id: "contact-name",
               value: this.state.contactLastName,
               onChange: this.onChange("contactLastName"),
               required: true
             }),
-            _react2.default.createElement(_emailInput2.default, {
+            React.createElement(EmailInput, {
               label: "Email",
               id: "contact-email",
               value: this.state.contactEmail,
               onChange: this.onChange("contactEmail"),
               required: true
             }),
-            _react2.default.createElement(_input2.default, {
+            React.createElement(Input, {
               label: "Phone (if known)",
               id: "contact-phone",
               value: this.state.contactPhone,
               onChange: this.onChange("contactPhone")
             })
           ),
-          _react2.default.createElement(_address2.default, {
+          React.createElement(Address, {
             label: "Postal address (if known)",
             value: this.state.contactPersonAddress,
             onChange: this.onChange("contactPersonAddress")
           })
         )
       ),
-      !this.state.showVerifyButton && (!this.state.contactPersonDoneStatus || this.state.newSearch) && !this.state.standAlonePage && _react2.default.createElement(
+      !this.state.showVerifyButton && (!this.state.contactPersonDoneStatus || this.state.newSearch) && !this.state.standAlonePage && React.createElement(
         "button",
         { className: "uikit-btn uikit-btn--tertiary search-button", onClick: this.handleClientContactPersonContinue },
         "Continue"
       ),
-      !this.state.showVerifyButton && this.state.standAlonePage && _react2.default.createElement(
+      !this.state.showVerifyButton && this.state.standAlonePage && React.createElement(
         "button",
         { className: "uikit-btn main-btn search-button", onClick: this.handleClientContactPersonContinue },
         this.state.standAloneLabel
@@ -671,7 +634,6 @@ var ContactPerson = function (_React$Component) {
   };
 
   return ContactPerson;
-}(_react2.default.Component);
+}(React.Component);
 
-exports.default = ContactPerson;
-module.exports = exports["default"];
+export default ContactPerson;
